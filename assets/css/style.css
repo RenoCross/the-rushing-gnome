@@ -72,6 +72,40 @@ a {
   flex: 1;
 }
 
-#contrib {
-  margin-bottom: 2rem;
+.contrib-list {
+  padding-left: 1.2rem;
+  margin-top: 0.5rem;
 }
+.contrib-list > li {
+  margin-bottom: 1rem;
+}
+.contrib-list ul {
+  margin-top: 0.4rem;
+  padding-left: 1rem;
+  list-style-type: disc;
+  color: #444;
+  font-size: 0.95rem;
+}
+
+.collapsible {
+  cursor: pointer;
+  user-select: none;
+  position: relative;
+}
+.collapsible::after {
+  content: "▼";
+  position: absolute;
+  right: 0;
+  transition: transform 0.3s;
+}
+.collapsible.active::after {
+  transform: rotate(-180deg);
+}
+.contrib-content {
+  display: none;
+  padding-top: 0.5rem;
+}
+.collapsible.active + .contrib-content {
+  display: block;
+}
+
