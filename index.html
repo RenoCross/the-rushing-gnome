@@ -9,13 +9,9 @@ title: ""
 </header>
 
 <main>
+
   <section id="poem">
     <h2>Reflections of a Rushing Gnome</h2>
-  
-    <div style="text-align: center;">
-      <img src="{{ '/assets/images/nain.jpeg' | relative_url }}" alt="Rushing Gnome">
-    </div>
-  
     <pre>
       Each day into a hurry
       Whether it is sunny or rainy
@@ -29,12 +25,22 @@ title: ""
       
       That progress counts, and hope will thrive.
     </pre>
+    <img src="{{ '/assets/images/nain.jpeg' | relative_url }}" alt="Rushing Gnome">
   </section>
 
   <section>
     <h2>Contributions</h2>
     <ul>
-      <li><a href="/scripts/ram_diagnostic.ps1">RAM Diagnostic PowerShell Script</a></li>
+      <li>
+        <a href="/scripts/ram_diagnostic.ps1">RAM Diagnostic PowerShell Script</a>
+        <p>Ce script permet :
+          <ul>d'obtenir la référence de la mémoire vive installée pour en connaître les caractéristiques</ul>
+          <ul>de vérifier si un emplacement est disponible</ul>
+          <ul>de voir la fréquence d'utilisation, si elle est bridée (HWInfo est un freeware plus complet)</ul>
+          <ul>d'estimer la taille maximale de mémoire qu'il est possible d'installer</ul>
+          <ul>d'obtenir la référence de la carte mère pour vérifier la fréquence max admissible</ul>
+        </p>
+      </li>
     </ul>
   </section>
 
