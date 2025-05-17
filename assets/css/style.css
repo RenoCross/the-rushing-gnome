@@ -1,4 +1,39 @@
 /* assets/css/style.css */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background: #f5f5f5;
+    color: #333;
+  }
+
+header {
+    background: #007acc;
+    color: white;
+    padding: 1rem;
+    text-align: center;
+  }
+
+main {
+    max-width: 800px;
+    margin: 1rem auto;
+    padding: 0.5rem; 
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  }
+
+h1, h2 {
+    margin-top: 0;
+  }
+
+ul {
+    padding-left: 1.5rem;
+  }
+
+a {
+    color: #007acc;
+  }
 
 #poem {
   background: #fff8dc;
@@ -41,39 +76,3 @@
   flex: 1;
 }
 
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background: #f5f5f5;
-    color: #333;
-  }
-
-header {
-    background: #007acc;
-    color: white;
-    padding: 1rem;
-    text-align: center;
-  }
-
-main {
-    max-width: 800px;
-    margin: 2rem auto;
-    margin-top: 0rem;   
-    padding: 1rem; 
-    background: white;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-  }
-
-h1, h2 {
-    margin-top: 0;
-  }
-
-ul {
-    padding-left: 1.5rem;
-  }
-
-a {
-    color: #007acc;
-  }
