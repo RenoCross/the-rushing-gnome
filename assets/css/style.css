@@ -7,11 +7,22 @@ body {
     color: #333;
   }
 
-header, footer {
+header {
     background: #007acc;
     color: white;
     padding: 1rem;
     text-align: center;
+  }
+
+footer {
+    background: #007acc;
+    color: #ffff00;
+    padding: 0.2rem;
+    text-align: center;
+  }
+
+footer a {
+    color: #ffff00;
   }
 
 main {
@@ -23,20 +34,19 @@ main {
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
   }
 
-h1, h2 {
+h1, h2, h3 {
     margin-top: 0;
+  }
+
+h1 {
+    text-decoration:underline;
     text-align: center;
     font-size: 1.8rem;
   }
 
-h1 {
-    text-decoration:underline
-  }
-
 h2 {
-    margin-top: 0;
     text-align: left;
-    font-size: rem;
+    font-size: 1.4rem;
   }
 a {
     color: #007acc;
@@ -60,6 +70,7 @@ a {
 #poem h2 {
   width: 100%;
   color: #6b4226;
+  text-align: center;
   font-size: 1.8rem;
   margin-bottom: 0.5rem;
 }
@@ -88,15 +99,16 @@ a {
   margin-top: 0.5rem;
 }
 .contrib-list > li {
-  background: #fff8dc;
+  background: #dcf5ff;
   margin-bottom: 1rem;
+  border-radius: 12px;
 }
 .contrib-list ul {
   margin-top: 0.4rem;
-  padding-left: 1rem;
+  padding-left: 2rem;
   list-style-type: disc;
   color: #444;
-  font-size: 0.95rem;
+  font-size: 0.8rem;
 }
 
 .collapsible {
