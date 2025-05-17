@@ -72,7 +72,6 @@ a {
   flex: 1;
 }
 
-#contrib p {
-  font-size: 0.8rem;
-  margin-bottom: 0.5rem;
+#contrib {
+  margin-bottom: 2rem;
 }
