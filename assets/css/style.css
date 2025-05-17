@@ -5,12 +5,17 @@
   padding: 2rem;
   border-radius: 12px;
   margin: 2rem auto;
-  max-width: 700px;
+  max-width: 800px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  font-family: 'Segoe Script', 'Georgia', serif;
+  font-family: 'Dancing Script', cursive;
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  flex-wrap: wrap;
 }
 
 #poem h2 {
+  width: 100%;
   text-align: center;
   color: #6b4226;
   font-size: 1.6rem;
@@ -18,10 +23,10 @@
 }
 
 #poem img {
-  max-width: 150px;
-  border-radius: 50%;
+  max-width: 200px;
+  border-radius: 8px;
   box-shadow: 0 0 6px rgba(0, 0, 0, 0.2);
-  margin-bottom: 0.5rem;
+  flex-shrink: 0;
 }
 
 #poem pre {
@@ -32,9 +37,11 @@
   background: transparent;
   border-left: 4px solid #d2b48c;
   padding-left: 1rem;
+  margin: 0;
+  flex: 1;
 }
 
-  body {
+body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
@@ -42,14 +49,14 @@
     color: #333;
   }
 
-  header {
+header {
     background: #007acc;
     color: white;
     padding: 1rem;
     text-align: center;
   }
 
-  main {
+main {
     max-width: 800px;
     margin: 2rem auto;
     padding: 1rem;
@@ -58,14 +65,14 @@
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
   }
 
-  h1, h2 {
+h1, h2 {
     margin-top: 0;
   }
 
-  ul {
+ul {
     padding-left: 1.5rem;
   }
 
-  a {
+a {
     color: #007acc;
   }
