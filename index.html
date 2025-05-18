@@ -79,11 +79,75 @@ title: ""
     </div>
     
   </section>
+
+  <section id="contact">
+    <h2>Formulaire de contact</h2>
+    <form id="contact-form">
+      <label for="name">Nom *</label><br>
+      <input type="text" id="name" name="name" required><br>
+  
+      <label for="email">Email</label><br>
+      <input type="email" id="email" name="email"><br>
+  
+      <label for="subject">Sujet *</label><br>
+      <input type="text" id="subject" name="subject" required><br>
+  
+      <label for="message">Message *</label><br>
+      <textarea id="message" name="message" rows="5" required></textarea><br>
+  
+      <!-- Anti-spam field (hidden) -->
+      <input type="text" name="website" style="display:none">
+  
+      <button type="submit">Envoyer</button>
+      <p id="form-status"></p>
+    </form>
+  </section>
+
+  <script>
+    const form = document.getElementById('contact-form');
+    const status = document.getElementById('form-status');
+  
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+  
+      // anti-spam : le champ caché ne doit pas être rempli
+      if (form.website.value !== "") {
+        status.textContent = "Spam détecté.";
+        return;
+      }
+  
+      const payload = {
+        name: form.name.value,
+        email: form.email.value || null,
+        subject: form.subject.value,
+        message: form.message.value
+      };
+  
+      const res = await fetch('https://dvzqvjmaavtvqzeilmcg.supabase.co/rest/v1/contact_messages', {
+        method: 'POST',
+        headers: {
+          'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR2enF2am1hYXZ0dnF6ZWlsbWNnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDc1OTM0OTMsImV4cCI6MjA2MzE2OTQ5M30.rZjwxo4YW6W4ZC2pvm0TGBvTLTkmSpZ8mJCOF3KAdzo',
+          'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR2enF2am1hYXZ0dnF6ZWlsbWNnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDc1OTM0OTMsImV4cCI6MjA2MzE2OTQ5M30.rZjwxo4YW6W4ZC2pvm0TGBvTLTkmSpZ8mJCOF3KAdzo',
+          'Content-Type': 'application/json',
+          'Prefer': 'return=minimal'
+        },
+        body: JSON.stringify(payload)
+      });
+  
+      if (res.ok) {
+        status.textContent = "Message envoyé ! Merci.";
+        form.reset();
+      } else {
+        status.textContent = "Erreur lors de l’envoi.";
+      }
+    });
+  </script>
+
+</main>
   
 <footer>
   Contact
-  <p>Author: Reno Cross</p>
-  <p>GitHub: <a href="https://github.com/RenoCross" target="_blank">@RenoCross</a></p>
+  <p>Author: Reno Cross   -   © 2025   -   GitHub: <a href="https://github.com/RenoCross" target="_blank">@RenoCross</a></p>
 </footer>
   
-</main>
+
