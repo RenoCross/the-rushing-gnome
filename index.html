@@ -47,6 +47,16 @@ title: ""
             <li>d'estimer la taille maximale de mémoire qu'il est possible d'installer</li>
             <li>d'obtenir la référence de la carte mère pour vérifier la fréquence max admissible</li>
           </ul>
+          <p>Petite procédure :</p>
+          <ul>
+            <li>changer l'extension du fichier joint *.txt en *.ps1 et l'enregistrer</li>
+            <li>lancer PowerShell en administrateur</li>
+            <li>autoriser temporairement les scripts : Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass</li>
+            <li>naviguer jusqu'au dossier du script : cd C:\Users\reno\Desktop (dans mon cas)</li>
+            <li>lancer le script en question : PS C:\Users\reno\Desktop> .\Get-RAMDetailedReport.ps1</li>
+            <li>revenir aux paramètres par défaut pour restreindre l'exécution de scripts : <code></code>Set-ExecutionPolicy -Scope Process -ExecutionPolicy Restricted</code></li>
+          </ul>
+          <p>Encore imparfait, toute aide pour l'améliorer est la bienvenue.</p>      
         </li>
       </ul>
     </div>
