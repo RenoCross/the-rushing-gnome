@@ -25,7 +25,8 @@ title: ""
       
       That progress counts, and hope will thrive.
     </pre>
-    <img src="{{ '/assets/images/nain.jpeg' | relative_url }}" alt="Rushing Gnome">
+    <!-- <img src="{{ '/assets/images/nain.jpeg' | relative_url }}" alt="Rushing Gnome"> -->
+    <div id="gnome-image"></div>
   </section>
 
   <section id="contrib">
@@ -189,6 +190,21 @@ title: ""
       select.appendChild(autreOption);
     });
 
+    // image à côté du poème aléatoire
+    
+    document.addEventListener('DOMContentLoaded', function () {
+      const gnomeImages = ['nain.jpeg', 'gnome_ChatGPT.jpeg'];
+      const chosenImage = gnomeImages[Math.floor(Math.random() * gnomeImages.length)];
+      const imageElement = document.createElement('img');
+      imageElement.src = `/the-rushing-gnome/assets/images/${chosenImage}`;
+      imageElement.alt = 'Rushing Gnome';
+      imageElement.style.maxWidth = '180px';
+      imageElement.style.borderRadius = '8px';
+      imageElement.style.boxShadow = '0 0 6px rgba(0, 0, 0, 0.2)';
+      imageElement.style.flexShrink = '0';
+  
+      document.getElementById('gnome-image').appendChild(imageElement);
+    });
   </script>
 
 </main>
