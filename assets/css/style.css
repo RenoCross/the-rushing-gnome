@@ -136,13 +136,68 @@ a {
   display: block;
 }
 
-.button1 {
-  background-color: #04AA6D; /* Green */
-  border: none;
-  color: white;
-  padding: 15px 32px;
-  text-align: center;
-  text-decoration: none;
+.button {
   display: inline-block;
-  font-size: 16px;
+  height: 2.75em;
+  line-height: 2.7em;
+  padding: 0 1.5em 0 1.5em;
+  border-radius: 4px;
+  text-decoration: none;
+  font-weight: 600;
+  border: solid 1px #dee0e3;
+  white-space: nowrap; }
+  .button:hover {
+    border-color: #e7746f;
+    color: #e7746f; }
+  .button.alt {
+    background: #676d79;
+    border-color: #676d79;
+    color: #fff; }
+    .button.alt.on, .button.alt:hover {
+      background: #e7746f;
+      border-color: #e7746f; }
+  .button.twitter.on, .button.twitter:hover {
+    background: #00acee;
+    border-color: #00acee;
+    color: #fff; }
+  .button em {
+    font-weight: 300; }
+  .button.icon {
+    padding: 0 1.2em 0 1em; }
+    .button.icon:before {
+      position: relative;
+      top: 0.15em;
+      margin-right: 0.4em; }
+    .button.icon.solo {
+      padding: 0;
+      width: 3em;
+      text-align: center;
+      position: relative; }
+      .button.icon.solo:before {
+        margin: 0; }
+      .button.icon.solo .label {
+        position: absolute;
+        left: 0;
+        top: 0;
+        text-indent: 100%;
+        overflow-x: hidden; }
+
+code {
+    font-family: "Courier New", monospace;
+    font-size: 0.9em;
+    border-radius: 4px;
+    border-top-left-radius: ;
+    border-top-right-radius: ;
+    border-bottom-right-radius: ;
+    border-bottom-left-radius: ;
+    margin: 0px 0.25rem;
+    margin-top: ;
+    margin-right: ;
+    margin-bottom: ;
+    margin-left: ;
+    padding: 0.25rem 0.325rem;
+    padding-top: ;
+    padding-right: ;
+    padding-bottom: ;
+    padding-left: ;
 }
