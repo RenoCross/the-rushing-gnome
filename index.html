@@ -118,13 +118,18 @@ title: ""
       <path d="M35 80 Q50 95 65 80" fill="white" />
     </svg>
   </div>
-  <form action="#" method="post" id="contact_form">
+  <form action="#" method="post" id="contact-form">
     <div class="name">
       <label for="name"></label>
       <input type="text" placeholder="My name is" name="name" id="name_input" required>
     </div>
+      <label for="name">Nom *</label><br>
+      <input type="text" id="name" name="name" required><br>
+    
     <div class="email">
       <label for="email"></label>
+      <!-- Anti-spam field (hidden) -->
+      <input type="text" name="website" style="display:none">
       <input type="email" placeholder="My e-mail is" name="email" id="email_input" required>
     </div>
     <div class="telephone">
@@ -132,17 +137,21 @@ title: ""
       <input type="text" placeholder="My number is" name="telephone" id="telephone_input" required>
     </div>
     <div class="subject">
+      <label for="subject">Sujet *</label><br>
+      <select id="subject" name="subject" required>
+        <option value="">-- Choisir un sujet --</option>
+      </select><br>
+
+      
       <label for="subject"></label>
-      <select placeholder="Subject line" name="subject" id="subject_input" required>
+      <select id="subject" placeholder="Subject line" name="subject" required>
         <option disabled hidden selected>Subject line</option>
-        <option>I'd like to start a project</option>
-        <option>I'd like to ask a question</option>
-        <option>I'd like to make a proposal</option>
+        <option value="">-- Choisir un sujet --</option>
       </select>
     </div>
     <div class="message">
       <label for="message"></label>
-      <textarea name="message" placeholder="I'd like to chat about" id="message_input" cols="30" rows="5" required></textarea>
+      <textarea name="message" placeholder="I'd like to chat/exchange/contribute about" id="message_input" cols="30" rows="5" required></textarea>
     </div>
     <div class="submit">
       <input type="submit" value="Send Message" id="form_button" />
