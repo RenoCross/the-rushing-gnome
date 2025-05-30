@@ -12,12 +12,11 @@ title: ""
 
   <section id="contrib">
 
-    <h2 class="collapsible">🔍 Recherche des caractéristiques d'un livre par son numéro ISBN</h2>
+    <h2 class="collapsible">Liste des fonctions à développer:</h2>
     <div class="contrib-content">
       <ul class="contrib-list">
         <li>
-          <h3>Liste des fonctions à développer:</h3>
-          <p>🔍 Recherche des caractéristiques d'un livre</p>          
+          <h3>🔍 Recherche des caractéristiques d'un livre:</h3>        
           <ol>
 			<li>Recueil du numéro ISBN par:</li>
 			  <ul>
@@ -30,7 +29,7 @@ title: ""
           </ol>
         </li>
         <li>
-          <h3>gestion d'une petite BdD</h3>
+          <h3>Gestion d'une petite BdD</h3>
           <p>Pour  partage simplifié au niveau du 1er cercle d'amis :</p>
           <ul>
             <li>Authentification utilisateur</li>
@@ -96,9 +95,12 @@ title: ""
 		  const json = await res.json();
 		  const book = json[`ISBN:${isbn}`];
 		  if (book) {
-			data = `<h2>${book.title}</h2>
+			data = `<h2><a href="${book.url}">${book.title}</a></h2>
 					<p>Auteur(s) : ${book.authors.map(a => a.name).join(", ")}</p>
-					<p>Publié par : ${book.publishers.map(p => p.name).join(", ")}</p>`;
+					<p>Publié par : ${book.publishers.map(p => p.name).join(", ")}, le ${book.publish_date}</p>
+					<p>Nombre de pages : ${book.number_of_pages}</p>
+					<p>OpenLibrary ID : ${book.identifiers.openlibrary}, Clé : ${book.key}</p>
+					<img src="${book.cover.medium}" alt="medium cover">`;
 		  } else {
 			data = "Aucune donnée trouvée.";
 		  }
