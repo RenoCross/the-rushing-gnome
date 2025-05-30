@@ -249,6 +249,7 @@ form {
   margin: 0 0;
 }
 
+/* -----------
 h1 {
   color: #474544;
   font-size: 32px;
@@ -256,6 +257,16 @@ h1 {
   letter-spacing: 7px;
   text-align: center;
   text-transform: uppercase;
+}------- */
+
+#form h1 {
+  color: #474544;
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: 7px;
+  text-align: center;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
 }
 
 .underline {
