@@ -249,16 +249,6 @@ form {
   margin: 0 0;
 }
 
-/* -----------
-h1 {
-  color: #474544;
-  font-size: 32px;
-  font-weight: 700;
-  letter-spacing: 7px;
-  text-align: center;
-  text-transform: uppercase;
-}------- */
-
 #container h1 {
   color: #474544;
   font-size: 32px;
@@ -277,7 +267,7 @@ h1 {
 }
 
 .icon_wrapper {
-  margin: 5px auto 0;
+  margin: 20px auto 0;
   width: 100%;
 }
 
