@@ -259,7 +259,7 @@ h1 {
   text-transform: uppercase;
 }------- */
 
-#form h1 {
+#container h1 {
   color: #474544;
   font-size: 32px;
   font-weight: 700;
