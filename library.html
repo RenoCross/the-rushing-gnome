@@ -1,0 +1,148 @@
+---
+layout: homepage
+title: ""
+---
+
+<header>
+  <h1>📘 The Rushing Gnome's Library</h1>
+  <p>Drafts • Ideas in progress • Friendly sharing of experiences • Beginnings of projects • Touch of madness</p>
+</header>
+
+<main>
+
+  <section id="contrib">
+
+    <h2 class="collapsible">🔍 Recherche des caractéristiques d'un livre par son numéro ISBN</h2>
+    <div class="contrib-content">
+      <ul class="contrib-list">
+        <li>
+          <h3>Liste des fonctions à développer:</h3>
+          <p>🔍 Recherche des caractéristiques d'un livre</p>          
+          <ol>
+			<li>Recueil du numéro ISBN par:</li>
+			  <ul>
+				<li>saisie via un formulaire</li>
+				<li>ou détection dans un ebook préalablement chargé et quelquesoit son extension (*.pdf, *.epub, *.djvu, ...)</li>
+			  </ul>
+		    <li>Interrogation de différentes API (Google / OpenLibrary / ISBNdb) avec affichage d'un compteur pour celles ayant une limite temporelle de nombre d'utilisation</li>
+		    <li>Affichage des données obtenues en en facilitant le copiage</li>
+
+          </ol>
+        </li>
+        <li>
+          <h3>gestion d'une petite BdD</h3>
+          <p>Pour  partage simplifié au niveau du 1er cercle d'amis :</p>
+          <ul>
+            <li>Authentification utilisateur</li>
+			<li>Pour chaque livre, saisie des caractéristiques du livre, de son lieu de stockage, de leur état, de l'accord de prêt, de la durée du prêt, si prêt en cours, nom emprunteur, appréciation éventuelle</li>
+            <li>gestion de relance email lors du dépassement de durée du prêt</li>
+            <li>saisie à partir du code ISBN</li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+
+    <h2 class="collapsible">🔍 Recherche des caractéristiques d'un livre par son numéro ISBN</h2>
+    <div class="contrib-content">
+      <ul class="contrib-list">
+        <li>
+          <h3>Formulaire de recherche:</h3>
+          <p></p>          
+			<form id="isbn-form">
+			  <label for="isbn">ISBN :</label>
+			  <input type="text" id="isbn" placeholder="978-..." required>
+
+			  <label for="api">API à utiliser :</label>
+			  <select id="api">
+				<option value="openlibrary">Open Library</option>
+				<option value="google">Google Books</option>
+				<option value="isbndb">ISBNdb</option>
+			  </select>
+
+			  <button type="submit">Rechercher</button>
+			</form>
+
+			<div id="resultat"></div>
+
+        </li>
+      </ul>
+    </div>
+    
+  </section>
+
+    
+  <ul class="actions stacked">
+    <li>
+      <a href="authenticated.html" class="button">For authenticated</a>
+      <a href="about/about-us.html" class="button">About us</a>
+    </li>
+  </ul>
+  
+  <script>
+	document.getElementById("isbn-form").addEventListener("submit", async function (e) {
+	  e.preventDefault();
+
+	  const isbn = document.getElementById("isbn").value.trim();
+	  const api = document.getElementById("api").value;
+	  const result = document.getElementById("resultat");
+
+	  result.innerHTML = "Recherche en cours...";
+
+	  try {
+		let data;
+
+		if (api === "openlibrary") {
+		  const res = await fetch(`https://openlibrary.org/api/books?bibkeys=ISBN:${isbn}&format=json&jscmd=data`);
+		  const json = await res.json();
+		  const book = json[`ISBN:${isbn}`];
+		  if (book) {
+			data = `<h2>${book.title}</h2>
+					<p>Auteur(s) : ${book.authors.map(a => a.name).join(", ")}</p>
+					<p>Publié par : ${book.publishers.map(p => p.name).join(", ")}</p>`;
+		  } else {
+			data = "Aucune donnée trouvée.";
+		  }
+
+		} else if (api === "google") {
+		  const res = await fetch(`https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}`);
+		  const json = await res.json();
+		  if (json.totalItems > 0) {
+			const item = json.items[0].volumeInfo;
+			data = `<h2>${item.title}</h2>
+					<p>Auteur(s) : ${item.authors?.join(", ")}</p>
+					<p>Éditeur : ${item.publisher || "Inconnu"}</p>
+					<p>Publié le : ${item.publishedDate || "?"}</p>`;
+		  } else {
+			data = "Aucune donnée trouvée.";
+		  }
+
+		} else if (api === "isbndb") {
+		  const res = await fetch(`https://api2.isbndb.com/book/${isbn}`, {
+			headers: {
+			  'Authorization': 'VOTRE_CLE_API_ISBNDB'
+			}
+		  });
+		  if (res.status === 200) {
+			const json = await res.json();
+			const book = json.book;
+			data = `<h2>${book.title}</h2>
+					<p>Auteur(s) : ${book.authors.join(", ")}</p>
+					<p>Éditeur : ${book.publisher}</p>`;
+		  } else {
+			data = "Aucune donnée trouvée ou clé API invalide.";
+		  }
+		}
+
+		result.innerHTML = data;
+	  } catch (err) {
+		result.innerHTML = "Erreur lors de la recherche.";
+		console.error(err);
+	  }
+	});
+  </script>
+
+</main>
+
+<footer>
+  <p>Author: Reno Cross   -   © 2025   -   GitHub: <a href="https://github.com/RenoCross" target="_blank">@RenoCross</a></p>
+</footer>
