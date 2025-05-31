@@ -61,10 +61,8 @@ title: ""
 			  <button type="submit">Rechercher</button>
 			</form>
 
-			<div id="resultat">
-			  <pre id="jsonOutput"></pre>
-			</div>
-
+			<div id="resultat"></div>
+			<pre id="jsonOutput"></pre>
         </li>
       </ul>
     </div>
@@ -95,9 +93,9 @@ title: ""
 		if (api === "openlibrary") {
 		  const res = await fetch(`https://openlibrary.org/api/books?bibkeys=ISBN:${isbn}&format=json&jscmd=data`);
 		  const jsonData = await res.json();
+		  document.getElementById("jsonOutput").textContent = JSON.stringify(jsonData, null, 2);
 		  const book = jsonData[`ISBN:${isbn}`];
 		  if (book) {
-		  	document.getElementById("jsonOutput").textContent = JSON.stringify(jsonData, null, 2);
 			data = `<h2><a href="${book.url}">${book.title}</a></h2>
 					<p>Auteur(s) : ${book.authors.map(a => a.name).join(", ")}</p>
 					<p>Publié par : ${book.publishers.map(p => p.name).join(", ")}, le ${book.publish_date}</p>
@@ -110,10 +108,11 @@ title: ""
 
 		} else if (api === "google") {
 		  const res = await fetch(`https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}`);
-		  const json = await res.json();
-		  if (json.totalItems > 0) {
-			const item = json.items[0].volumeInfo;
-			data = `<h2><a href="${json.items[0].selfLink}">${item.title}</a></h2>
+		  const jsonData = await res.json();
+		  document.getElementById("jsonOutput").textContent = JSON.stringify(jsonData, null, 2);
+		  if (jsonData.totalItems > 0) {
+			const item = jsonData.items[0].volumeInfo;
+			data = `<h2><a href="${jsonData.items[0].selfLink}">${item.title}</a></h2>
 					<p>Auteur(s) : ${item.authors?.join(", ")}</p>
 					<p>Publié par : ${item.publisher || "Inconnu"}, le : ${item.publishedDate || "?"}</p>
 					<p>Nombre de pages : ${item.pageCount}</p>`;
@@ -127,6 +126,8 @@ title: ""
 			  'Authorization': 'VOTRE_CLE_API_ISBNDB'
 			}
 		  });
+		  const jsonData = await res.json();
+		  document.getElementById("jsonOutput").textContent = JSON.stringify(jsonData, null, 2);
 		  if (res.status === 200) {
 			const json = await res.json();
 			const book = json.book;
