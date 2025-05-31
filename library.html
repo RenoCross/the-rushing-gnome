@@ -50,18 +50,15 @@ title: ""
 			<form id="isbn-form">
 			  <label for="isbn">ISBN :</label>
 			  <input type="text" id="isbn" placeholder="978-..." required>
-
-			  <label for="api">API à utiliser :</label>
-			  <select id="api">
-				<option value="openlibrary">Open Library</option>
-				<option value="google">Google Books</option>
-				<option value="isbndb">ISBNdb</option>
-			  </select>
-
-			  <button type="submit">Rechercher</button>
+			  <fieldset>
+			    <legend>Choisissez les APIs à interroger :</legend>
+			    <label><input type="checkbox" name="api" value="openlibrary">Open Library</label><br>
+			    <label><input type="checkbox" name="api" value="google">Google Books</label><br>
+			    <label><input type="checkbox" name="api" value="isbndb">ISBNdb</label>
+			  </fieldset>
+			  <button onclick="fetchBookData()">Rechercher</button>
 			</form>
-
-			<div id="resultat"></div>
+			<div id="results"></div>
 			<pre id="jsonOutput"></pre>
         </li>
       </ul>
@@ -77,75 +74,88 @@ title: ""
     </li>
   </ul>
   
-  <script> 
-	document.getElementById("isbn-form").addEventListener("submit", async function (e) {
-	  e.preventDefault();
+  <script>
+  async function fetchBookData() {
+    const isbn = document.getElementById("isbn").value.trim();
+    const selectedApis = Array.from(document.querySelectorAll('input[name="api"]:checked'))
+							.map(input => input.value);
 
-	  const isbn = document.getElementById("isbn").value.trim();
-	  const api = document.getElementById("api").value;
-	  const result = document.getElementById("resultat");
+  const resultsDiv = document.getElementById("results");
+  resultsDiv.innerHTML = ""; // Clear previous results
 
-	  result.innerHTML = "Recherche en cours...";
+  if (!isbn || selectedApis.length === 0) {
+	resultsDiv.innerHTML = "<p>Veuillez entrer un ISBN et sélectionner au moins une API.</p>";
+	return;
+  }
 
-	  try {
-		let data;
-
-		if (api === "openlibrary") {
-		  const res = await fetch(`https://openlibrary.org/api/books?bibkeys=ISBN:${isbn}&format=json&jscmd=data`);
-		  const jsonData = await res.json();
-		  document.getElementById("jsonOutput").textContent = JSON.stringify(jsonData, null, 2);
-		  const book = jsonData[`ISBN:${isbn}`];
-		  if (book) {
-			data = `<h2><a href="${book.url}">${book.title}</a></h2>
-					<p>Auteur(s) : ${book.authors.map(a => a.name).join(", ")}</p>
-					<p>Publié par : ${book.publishers.map(p => p.name).join(", ")}, le ${book.publish_date}</p>
-					<p>Nombre de pages : ${book.number_of_pages}</p>
-					<p>OpenLibrary ID : ${book.identifiers.openlibrary}, Clé : ${book.key}</p>
-					<img src="${book.cover.medium}" alt="medium cover">`;
-		  } else {
-			data = "Aucune donnée trouvée.";
+  for (const api of selectedApis) {
+	let data;
+	try {
+	  if (api === "openlibrary") {
+		const res = await fetch(`https://openlibrary.org/api/books?bibkeys=ISBN:${isbn}&format=json&jscmd=data`);
+		const jsonData = await res.json();
+		document.getElementById("jsonOutput").textContent = JSON.stringify(jsonData, null, 2);
+		data = jsonData[`ISBN:${isbn}`];
+	  } else if (api === "google") {
+		const res = await fetch(`https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}`);
+		const json = await res.json();
+		data = json.items?.[0]?.volumeInfo;
+	  } else if (api === "isbndb") {
+		const res = await fetch(`https://api.isbndb.com/book/${isbn}`, {
+		  headers: {
+			"Authorization": "YOUR_ISBNDB_API_KEY" // Remplace avec ta clé API
 		  }
-
-		} else if (api === "google") {
-		  const res = await fetch(`https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}`);
-		  const jsonData = await res.json();
-		  document.getElementById("jsonOutput").textContent = JSON.stringify(jsonData, null, 2);
-		  if (jsonData.totalItems > 0) {
-			const item = jsonData.items[0].volumeInfo;
-			data = `<h2><a href="${jsonData.items[0].selfLink}">${item.title}</a></h2>
-					<p>Auteur(s) : ${item.authors?.join(", ")}</p>
-					<p>Publié par : ${item.publisher || "Inconnu"}, le : ${item.publishedDate || "?"}</p>
-					<p>Nombre de pages : ${item.pageCount}</p>`;
-		  } else {
-			data = "Aucune donnée trouvée.";
-		  }
-
-		} else if (api === "isbndb") {
-		  const res = await fetch(`https://api2.isbndb.com/book/${isbn}`, {
-			headers: {
-			  'Authorization': 'VOTRE_CLE_API_ISBNDB'
-			}
-		  });
-		  const jsonData = await res.json();
-		  document.getElementById("jsonOutput").textContent = JSON.stringify(jsonData, null, 2);
-		  if (res.status === 200) {
-			const json = await res.json();
-			const book = json.book;
-			data = `<h2>${book.title}</h2>
-					<p>Auteur(s) : ${book.authors.join(", ")}</p>
-					<p>Éditeur : ${book.publisher}</p>`;
-		  } else {
-			data = "Aucune donnée trouvée ou clé API invalide.";
-		  }
-		}
-
-		result.innerHTML = data;
-	  } catch (err) {
-		result.innerHTML = "Erreur lors de la recherche.";
-		console.error(err);
+		});
+		const json = await res.json();
+		data = json.book;
 	  }
-	});
-  </script>
+
+	  if (data) {
+		renderTable(api, data);
+	  } else {
+		renderError(api, "Aucune donnée trouvée.");
+	  }
+	} catch (err) {
+	  console.error(`Erreur API ${api}:`, err);
+	  renderError(api, "Erreur lors de la récupération des données.");
+	}
+  }
+}
+
+function renderTable(api, book) {
+  const resultsDiv = document.getElementById("results");
+
+  const table = document.createElement("table");
+  table.border = "1";
+  table.style.marginTop = "1rem";
+  table.innerHTML = `
+	<caption><strong>Résultats via ${api}</strong></caption>
+	<tr><th>Titre</th><td>${book.title || "-"}</td></tr>
+	<tr><th>Auteur</th><td>${(book.authors.map(a => a.name).join(", ") || book.authors?.[0] || "-")}</td></tr>
+	<tr><th>Éditeur</th><td>${book.publishers?.[0]?.name || book.publisher || "-"}</td></tr>
+	<tr><th>Date</th><td>${book.publish_date || book.publishedDate || "-"}</td></tr>
+	<tr><th>Nombre de pages</th><td>${book.number_of_pages || book.number_of_pages || "-"}</td></tr>
+	<tr><th>URL</th><td><a href="${book.url || book.url || "-"}">${book.url || book.url || "-"}</a></td></tr>
+	<tr><th>ID</th><td>${book.key || book.key || "-"}</td></tr>	
+	<tr><th>ISBN</th><td>${book.identifiers?.isbn_13?.[0] || book.industryIdentifiers?.[0]?.identifier || "-"}</td></tr>
+	<tr><th>ID</th><td><img src="${book.cover.medium}" alt="medium cover"></td></tr>
+  `;
+
+  resultsDiv.appendChild(table);
+}
+
+function renderError(api, message) {
+  const resultsDiv = document.getElementById("results");
+  const error = document.createElement("p");
+  error.innerHTML = `<strong>${api}</strong> : ${message}`;
+  error.style.color = "red";
+  resultsDiv.appendChild(error);
+}
+</script>
+
+
+
+
 
 </main>
 
