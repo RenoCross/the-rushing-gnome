@@ -390,6 +390,13 @@ textarea {
   color: #F2F3EB;
 }
 
+#results {
+  margin-top: 2rem;
+  background: #eef;
+  padding: 1rem;
+  border-radius: 6px;
+}
+
 @media screen and (max-width: 768px) {
   #container {
     margin: 20px auto;
