@@ -15,16 +15,16 @@ title: ""
     <div class="contrib-content">
       <ul class="contrib-list">
         <li>
-          <h3>🔍 Recherche des caractéristiques d'un livre:</h3>        
+          <h3>🔍 Recherche des caractéristiques d'un livre:</h3>
           <ol>
-			<li>Recueil du numéro ISBN par:</li>
+			<li>Recueil du numéro ISBN par:
 			  <ul>
 				<li>saisie via un formulaire</li>
 				<li>ou détection dans un ebook préalablement chargé et quelquesoit son extension (*.pdf, *.epub, *.djvu, ...)</li>
 			  </ul>
+			</li>
 		    <li>Interrogation de différentes API (Google / OpenLibrary / ISBNdb) avec affichage d'un compteur pour celles ayant une limite temporelle de nombre d'utilisation</li>
 		    <li>Affichage des données obtenues en en facilitant le copiage</li>
-
           </ol>
         </li>
         <li>
@@ -44,7 +44,7 @@ title: ""
       <ul class="contrib-list">
         <li>
           <h3>Formulaire de recherche:</h3>
-          <p></p>          
+          <p></p>
 			<form id="isbn-form">
 			  <label for="isbn">ISBN :</label>
 			  <input type="text" id="isbn" placeholder="978-..." required>
@@ -54,7 +54,7 @@ title: ""
 			    <label><input type="checkbox" name="api" value="google">Google Books</label><br>
 			    <label><input type="checkbox" name="api" value="isbndb">ISBNdb</label>
 			  </fieldset>
-			  <button onclick="fetchBookData()">Rechercher</button>
+			  <button type="submit">Rechercher</button>
 			</form>
         </li>
       </ul>
@@ -75,55 +75,69 @@ title: ""
       <a href="index.html" class="button">Homepage</a>	  
     </li>
   </ul>
-  
+		  
   <script>
-  async function fetchBookData() {
-    const isbn = document.getElementById("isbn").value.trim();
-    const selectedApis = Array.from(document.querySelectorAll('input[name="api"]:checked'))
-							.map(input => input.value);
+	document.addEventListener("DOMContentLoaded", function () {
+	  const form = document.getElementById("isbn-form");
 
-  const resultsDiv = document.getElementById("results");
-  resultsDiv.innerHTML = ""; // Clear previous results
+	  form.addEventListener("submit", async function (e) {
+		e.preventDefault();
+		await fetchBookData(); // On attend la complétion pour éviter tout comportement asynchrone imprévu
+	  });
 
-  if (!isbn || selectedApis.length === 0) {
-	resultsDiv.innerHTML = "<p>Veuillez entrer un ISBN et sélectionner au moins une API.</p>";
-	return;
-  }
+	  async function fetchBookData() {
+		const isbn = document.getElementById("isbn").value.trim();
+		const selectedApis = Array.from(document.querySelectorAll('input[name="api"]:checked'))
+								.map(input => input.value);
 
-  for (const api of selectedApis) {
-	let data;
-	try {
-	  if (api === "openlibrary") {
-		const res = await fetch(`https://openlibrary.org/api/books?bibkeys=ISBN:${isbn}&format=json&jscmd=data`);
-		const jsonData = await res.json();
-		document.getElementById("jsonOutput").textContent = JSON.stringify(jsonData, null, 2);
-		data = jsonData[`ISBN:${isbn}`];
-	  } else if (api === "google") {
-		const res = await fetch(`https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}`);
-		const json = await res.json();
-		data = json.items?.[0]?.volumeInfo;
-	  } else if (api === "isbndb") {
-		const res = await fetch(`https://api.isbndb.com/book/${isbn}`, {
-		  headers: {
-			"Authorization": "YOUR_ISBNDB_API_KEY" // Remplace avec ta clé API
+		const resultsDiv = document.getElementById("results");
+		const jsonOutput = document.getElementById("jsonOutput");
+		resultsDiv.innerHTML = "";
+		jsonOutput.textContent = "";
+
+		if (!isbn || selectedApis.length === 0) {
+		  resultsDiv.innerHTML = "<p>Veuillez entrer un ISBN et sélectionner au moins une API.</p>";
+		  return;
+		}
+
+	    for (const api of selectedApis) {
+		  let data;
+		  try {
+		    if (api === "openlibrary") {
+			  const res = await fetch(`https://openlibrary.org/api/books?bibkeys=ISBN:${isbn}&format=json&jscmd=data`);
+			  const jsonData = await res.json();
+			  document.getElementById("jsonOutput").textContent = JSON.stringify(jsonData, null, 2);
+			  data = jsonData[`ISBN:${isbn}`];
+			  jsonOutput.textContent += `\n[OpenLibrary]\n` + JSON.stringify(data, null, 2);
+		    } else if (api === "google") {
+			  const res = await fetch(`https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}`);
+			  const json = await res.json();
+			  data = json.items?.[0]?.volumeInfo;
+			  jsonOutput.textContent += `\n[Google Books]\n` + JSON.stringify(data, null, 2);
+		    } else if (api === "isbndb") {
+			  const res = await fetch(`https://api.isbndb.com/book/${isbn}`, {
+			    headers: {
+				  "Authorization": "YOUR_ISBNDB_API_KEY" // Remplace avec ta clé API
+			    }
+			  });
+			  const json = await res.json();
+			  data = json.book;
+			  jsonOutput.textContent += `\n[ISBNdb]\n` + JSON.stringify(data, null, 2);
+		    }
+
+		    if (data) {
+			renderTable(api, data);
+		    } else {
+			  renderError(api, "Aucune donnée trouvée.");
+		    }
+		  } catch (err) {
+		    console.error(`Erreur API ${api}:`, err);
+		    renderError(api, "Erreur lors de la récupération des données.");
 		  }
-		});
-		const json = await res.json();
-		data = json.book;
+	    }
 	  }
-
-	  if (data) {
-		renderTable(api, data);
-	  } else {
-		renderError(api, "Aucune donnée trouvée.");
-	  }
-	} catch (err) {
-	  console.error(`Erreur API ${api}:`, err);
-	  renderError(api, "Erreur lors de la récupération des données.");
-	}
-  }
-}
-
+	});
+	
 function renderTable(api, book) {
   const resultsDiv = document.getElementById("results");
 
@@ -140,7 +154,7 @@ function renderTable(api, book) {
 	<tr><th>URL</th><td><a href="${book.url || book.url || "-"}">${book.url || book.url || "-"}</a></td></tr>
 	<tr><th>ID</th><td>${book.key || book.key || "-"}</td></tr>	
 	<tr><th>ISBN</th><td>${book.identifiers?.isbn_13?.[0] || book.industryIdentifiers?.[0]?.identifier || "-"}</td></tr>
-	<tr><th>ID</th><td><img src="${book.cover.medium}" alt="medium cover"></td></tr>
+	<tr><th>Cover</th><td><img src="${book.cover.medium || ''}" alt="medium cover"></td></tr>
   `;
 
   resultsDiv.appendChild(table);
@@ -154,10 +168,6 @@ function renderError(api, message) {
   resultsDiv.appendChild(error);
 }
 </script>
-
-
-
-
 
 </main>
 
