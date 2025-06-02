@@ -29,12 +29,12 @@ document.addEventListener("DOMContentLoaded", function () {
 					const res = await fetch(`https://openlibrary.org/api/books?bibkeys=ISBN:${isbn}&format=json&jscmd=data`);
 					const jsonData = await res.json();
 					data = jsonData[`ISBN:${isbn}`];
-					jsonOutput.textContent += `\n[OpenLibrary]\n` + JSON.stringify(data, null, 2);
+					jsonOutput.textContent += `\n[OpenLibrary]\n` + JSON.stringify(jsonData, null, 2);
 				} else if (api === "google") {
 					const res = await fetch(`https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}`);
-					const json = await res.json();
-					data = json.items?.[0]?.volumeInfo;
-					jsonOutput.textContent += `\n[Google Books]\n` + JSON.stringify(data, null, 2);
+					const jsonData = await res.json();
+					data = jsonData.items?.[0]?.volumeInfo;
+					jsonOutput.textContent += `\n[Google Books]\n` + JSON.stringify(jsonData, null, 2);
 				} else if (api === "isbndb") {
 					const res = await fetch(`https://api.isbndb.com/book/${isbn}`, {
 						headers: {
