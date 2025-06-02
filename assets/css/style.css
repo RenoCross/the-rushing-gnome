@@ -459,7 +459,7 @@ textarea {
   max-width: 700px;
   margin: 2em auto;
   text-align: center;
-  font-size: 2em;
+  font-size: 2em !important;
   line-height: 1.8;
   background: #fdfdfd;
   padding: 1.5em;
@@ -474,7 +474,7 @@ textarea {
 .poem-title {
   text-align: center;
   font-weight: bold;
-  font-size: 3em;
+  font-size: 3em !important;
   margin-bottom: 1em;
 }
 
@@ -482,6 +482,6 @@ textarea {
   padding-left: 8em;
   text-align: center;
   font-weight: bold;
-  font-size: 2em;
+  font-size: 2em !important;
   margin-top: 1em;
 }
