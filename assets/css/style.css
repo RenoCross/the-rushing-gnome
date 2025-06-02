@@ -435,5 +435,39 @@ textarea {
   input[type='text'], [type='email'], select, textarea {
     font-size: 0.875em;
   }
-}
+  
+/* -------------------------------------------- */
+/*                     poem                     */
 
+  .poem-block {
+    max-width: 700px;
+    margin: 2em auto;
+    text-align: center;
+    font-family: 'Dancing Script', cursive;
+    font-size: 1.3em;
+    line-height: 1.7;
+    background: #fdfdfd;
+    padding: 1.5em;
+    border-left: 4px solid #ccc;
+    border-radius: 8px;
+  }
+
+  .poem-text {
+    margin-bottom: 1em;
+  }
+
+  .poem-title {
+    text-align: center;
+    font-weight: bold;
+    font-size: 1.5em;
+  }
+
+  .poem-author {
+    text-align: right;
+    font-weight: bold;
+    font-family: Georgia, serif;
+    font-size: 1em;
+    margin-top: 1em;
+  }
+  
+}
