@@ -459,8 +459,8 @@ textarea {
   max-width: 700px;
   margin: 2em auto;
   text-align: center;
-  font-size: 1.3em;
-  line-height: 1.7;
+  font-size: 1.5em;
+  line-height: 1.8;
   background: #fdfdfd;
   padding: 1.5em;
   border-left: 4px solid #ccc;
@@ -474,17 +474,13 @@ textarea {
 .poem-title {
   text-align: center;
   font-weight: bold;
-  font-size: 1.5em;
+  font-size: 2em;
 }
 
 .poem-author {
-  text-align: right;
+  padding: 1.5em 0 0 0;
+  text-align: center;
   font-weight: bold;
-  font-size: 1em;
+  font-size: 1.5em;
   margin-top: 1em;
-}
-
-
-* {
-  font-family: 'CursiveCustom', cursive !important;
 }
