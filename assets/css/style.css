@@ -478,7 +478,7 @@ textarea {
 }
 
 .poem-author {
-  padding: 1.5em 0 0 0;
+  padding-left: 8em;
   text-align: center;
   font-weight: bold;
   font-size: 1.5em;
