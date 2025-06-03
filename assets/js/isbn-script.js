@@ -71,18 +71,18 @@ async function fetchBookData() {
 	table.appendChild(headerRow);
 
 	const fields = {
-		"ISBN": d => d.identifiers?.isbn_13?.[0] || d.industryIdentifiers?.[0]?.identifier || "-",
+		"ISBN": d => d.identifiers?.isbn_13?.[0] || d.industryIdentifiers.map(a => a.identifier).join(", ") || "-",
 		"Titre": d => d.title || "-",
 		"Sous-titre": d => d.subtitle || "-",
-		"Auteur": d => Array.isArray(d.authors) ? d.authors.map(a => a.name || a).join(", ") : d.authors || "-",
+		"Auteur": d => d.authors.map(a => a.name).join(", ") || d.authors?.[0] || "-",
 		"Éditeur": d => d.publishers?.[0]?.name || d.publisher || "-",
 		"Date": d => d.publish_date || d.publishedDate || "-",
 		"Description": d => d.description || "-",
 		"Pages": d => d.number_of_pages || d.pageCount || "-",
 		"Type d'impression": d => d.printType || "-",
 		"Langue": d => d.language || "-",
-		//"ID": d => d.key || d.id || "-",
-		//"URL": d => d.url ? `<a href="${d.url}">${d.url}</a>` : "-",
+		"ID": d => d.key || d.id || "-",
+		"URL": d => d.url ? `<a href="${d.url}">${d.url}</a>` : "-",
 		"Couverture": d => d.cover?.medium ? `<img src="${d.cover.medium}" height="100">` : "-"
 	};
 
@@ -99,7 +99,7 @@ async function fetchBookData() {
 	resultsDiv.appendChild(table);
 }
 
-	
+
 	function renderTable(api, book) {
 		const resultsDiv = document.getElementById("results");
 		const table = document.createElement("table");
@@ -107,10 +107,6 @@ async function fetchBookData() {
 		table.style.marginTop = "1rem";
 		table.innerHTML = `
 			<caption><strong>Résultats via ${api}</strong></caption>
-   			<tr><th>ISBN</th><td>${book.identifiers?.isbn_13?.[0] || book.industryIdentifiers.map(a => a.identifier).join(", ") || "-"}</td></tr>
-			<tr><th>Titre</th><td>${book.title || "-"}</td></tr>
-			<tr><th>Sous-titre</th><td>${book.subtitle || "-"}</td></tr>   
-			<tr><th>Auteur</th><td>${(book.authors.map(a => a.name).join(", ") || book.authors?.[0] || "-")}</td></tr>
 			<tr><th>Éditeur</th><td>${book.publishers?.[0]?.name || book.publisher || "-"}</td></tr>
 			<tr><th>Date</th><td>${book.publish_date || book.publishedDate || "-"}</td></tr>
 			<tr><th>Description</th><td>${book.description || "-"}</td></tr>
