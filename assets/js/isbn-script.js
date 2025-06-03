@@ -11,55 +11,95 @@ document.addEventListener("DOMContentLoaded", function () {
 		document.getElementById("loader").style.display = "none";
 	});
 
-	async function fetchBookData() {
-		const isbn = document.getElementById("isbn").value.trim();
-		const selectedApis = Array.from(document.querySelectorAll('input[name="api"]:checked')).map(input => input.value);
-		const resultsDiv = document.getElementById("results");
-		const jsonOutput = document.getElementById("jsonOutput");
-		resultsDiv.innerHTML = "";
-		jsonOutput.textContent = "";
-		if (!isbn || selectedApis.length === 0) {
-			resultsDiv.innerHTML = "<p>Veuillez entrer un ISBN et sélectionner au moins une API.</p>";
-			return;
-		}
-		for (const api of selectedApis) {
-			let data;
-			try {
-				if (api === "openlibrary") {
-					const res = await fetch(`https://openlibrary.org/api/books?bibkeys=ISBN:${isbn}&format=json&jscmd=data`);
-					const jsonData = await res.json();
-					data = jsonData[`ISBN:${isbn}`];
-					jsonOutput.textContent += `\n[OpenLibrary - Raw result]\n` + JSON.stringify(jsonData, null, 2) + ` <br>` ;
-					jsonOutput.textContent += `\n[OpenLibrary]\n` + JSON.stringify(data, null, 2);
-				} else if (api === "google") {
-					const res = await fetch(`https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}`);
-					const jsonData = await res.json();
-					data = jsonData.items?.[0]?.volumeInfo;
-					jsonOutput.textContent += `\n[Google Books - Raw result]\n` + JSON.stringify(jsonData, null, 2) + ` <br>` ;
-					jsonOutput.textContent += `\n[Google Books]\n` + JSON.stringify(data, null, 2);					
-				} else if (api === "isbndb") {
-					const res = await fetch(`https://api.isbndb.com/book/${isbn}`, {
-						headers: {
-							"Authorization": "YOUR_ISBNDB_API_KEY"
-						}
-					});
-					const json = await res.json();
-					data = json.book;
-					jsonOutput.textContent += `\n[ISBNdb]\n` + JSON.stringify(data, null, 2);
-				}
+async function fetchBookData() {
+	const isbn = document.getElementById("isbn").value.trim();
+	const selectedApis = Array.from(document.querySelectorAll('input[name="api"]:checked')).map(input => input.value);
+	const resultsDiv = document.getElementById("results");
+	const jsonOutput = document.getElementById("jsonOutput");
+	resultsDiv.innerHTML = "";
+	jsonOutput.textContent = "";
+	if (!isbn || selectedApis.length === 0) {
+		resultsDiv.innerHTML = "<p>Veuillez entrer un ISBN et sélectionner au moins une API.</p>";
+		return;
+	}
 
-				if (data) {
-					renderTable(api, data);
-				} else {
-					renderError(api, "Aucune donnée trouvée.");
-				}
-			} catch (err) {
-				console.error(`Erreur API ${api}:`, err);
-				renderError(api, "Erreur lors de la récupération des données.");
+	const allData = {};
+
+	for (const api of selectedApis) {
+		try {
+			let data;
+			if (api === "openlibrary") {
+				const res = await fetch(`https://openlibrary.org/api/books?bibkeys=ISBN:${isbn}&format=json&jscmd=data`);
+				const jsonData = await res.json();
+				data = jsonData[`ISBN:${isbn}`];
+				jsonOutput.textContent += `\n[OpenLibrary]\n` + JSON.stringify(data, null, 2);
+			} else if (api === "google") {
+				const res = await fetch(`https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}`);
+				const jsonData = await res.json();
+				data = jsonData.items?.[0]?.volumeInfo;
+				jsonOutput.textContent += `\n[Google Books]\n` + JSON.stringify(data, null, 2);
+			} else if (api === "isbndb") {
+				const res = await fetch(`https://api.isbndb.com/book/${isbn}`, {
+					headers: {
+						"Authorization": "YOUR_ISBNDB_API_KEY"
+					}
+				});
+				const json = await res.json();
+				data = json.book;
+				jsonOutput.textContent += `\n[ISBNdb]\n` + JSON.stringify(data, null, 2);
 			}
+
+			allData[api] = data || {};
+		} catch (err) {
+			console.error(`Erreur API ${api}:`, err);
+			allData[api] = { error: "Erreur lors de la récupération des données." };
 		}
 	}
 
+	renderUnifiedTable(allData);
+}
+
+	function renderUnifiedTable(allData) {
+	const resultsDiv = document.getElementById("results");
+	const table = document.createElement("table");
+	table.border = "1";
+	table.style.marginTop = "1rem";
+
+	// Entêtes
+	const headerRow = document.createElement("tr");
+	headerRow.innerHTML = `<th>Champ</th>${Object.keys(allData).map(api => `<th>${api}</th>`).join("")}`;
+	table.appendChild(headerRow);
+
+	const fields = {
+		"ISBN": d => d.identifiers?.isbn_13?.[0] || d.industryIdentifiers?.[0]?.identifier || "-",
+		"Titre": d => d.title || "-",
+		"Sous-titre": d => d.subtitle || "-",
+		"Auteur": d => Array.isArray(d.authors) ? d.authors.map(a => a.name || a).join(", ") : d.authors || "-",
+		"Éditeur": d => d.publishers?.[0]?.name || d.publisher || "-",
+		"Date": d => d.publish_date || d.publishedDate || "-",
+		"Description": d => d.description || "-",
+		"Pages": d => d.number_of_pages || d.pageCount || "-",
+		"Type d'impression": d => d.printType || "-",
+		"Langue": d => d.language || "-",
+		"ID": d => d.key || d.id || "-",
+		"URL": d => d.url ? `<a href="${d.url}">${d.url}</a>` : "-",
+		"Couverture": d => d.cover?.medium ? `<img src="${d.cover.medium}" height="100">` : "-"
+	};
+
+	for (const label in fields) {
+		const row = document.createElement("tr");
+		const cells = Object.entries(allData).map(([api, data]) => {
+			if (data?.error) return `<td style="color:red;">${data.error}</td>`;
+			return `<td>${fields[label](data)}</td>`;
+		});
+		row.innerHTML = `<th>${label}</th>${cells.join("")}`;
+		table.appendChild(row);
+	}
+
+	resultsDiv.appendChild(table);
+}
+
+	
 	function renderTable(api, book) {
 		const resultsDiv = document.getElementById("results");
 		const table = document.createElement("table");
