@@ -66,13 +66,14 @@ document.addEventListener("DOMContentLoaded", function () {
 		table.style.marginTop = "1rem";
 		table.innerHTML = `
 			<caption><strong>Résultats via ${api}</strong></caption>
+   			<tr><th>ISBN</th><td>${book.identifiers?.isbn_13?.[0] || book.industryIdentifiers.map(a => a.identifier).join(", ") || "-"}</td></tr>
 			<tr><th>Titre</th><td>${book.title || "-"}</td></tr>
 			<tr><th>Sous-titre</th><td>${book.subtitle || "-"}</td></tr>   
 			<tr><th>Auteur</th><td>${(book.authors.map(a => a.name).join(", ") || book.authors?.[0] || "-")}</td></tr>
 			<tr><th>Éditeur</th><td>${book.publishers?.[0]?.name || book.publisher || "-"}</td></tr>
 			<tr><th>Date</th><td>${book.publish_date || book.publishedDate || "-"}</td></tr>
 			<tr><th>Description</th><td>${book.description || "-"}</td></tr>
-
+			<tr><th>Nombre de pages</th><td>${book.number_of_pages || book.pageCount || "-"}</td></tr>
 			`;
 		resultsDiv.appendChild(table);
 	}
