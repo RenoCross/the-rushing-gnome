@@ -59,7 +59,7 @@ async function fetchBookData() {
 	renderUnifiedTable(allData);
 }
 
-	function renderUnifiedTable(allData) {
+function renderUnifiedTable(allData) {
 	const resultsDiv = document.getElementById("results");
 	const table = document.createElement("table");
 	table.border = "1";
@@ -67,7 +67,7 @@ async function fetchBookData() {
 
 	// Entêtes
 	const headerRow = document.createElement("tr");
-	headerRow.innerHTML = `<th>Champ</th>${Object.keys(allData).map(api => `<th>${api}</th>`).join("")}`;
+	headerRow.innerHTML = `<th>Champ</th>${Object.keys(allData).map(api => `<th>Résultats de ${api}</th>`).join("")}`;
 	table.appendChild(headerRow);
 
 	const fields = {
@@ -81,9 +81,9 @@ async function fetchBookData() {
 		"Pages": d => d.number_of_pages || d.pageCount || "-",
 		"Type d'impression": d => d.printType || "-",
 		"Langue": d => d.language || "-",
-		"ID": d => d.key || d.id || "-",
-		"URL": d => d.url ? `<a href="${d.url}">${d.url}</a>` : "-",
-		"Couverture": d => d.cover?.medium ? `<img src="${d.cover.medium}" height="100">` : "-"
+		"ID": d => d.key || "-",
+		"URL": d => d.url ? `<a href="${d.url}">${d.url}</a>` || "-",
+		"Couverture": d => d.cover?.medium ? `<img src="${d.cover.medium}" height="100" alt="medium cover">` || "-"
 	};
 
 	for (const label in fields) {
@@ -97,35 +97,4 @@ async function fetchBookData() {
 	}
 
 	resultsDiv.appendChild(table);
-}
-
-
-	function renderTable(api, book) {
-		const resultsDiv = document.getElementById("results");
-		const table = document.createElement("table");
-		table.border = "1";
-		table.style.marginTop = "1rem";
-		table.innerHTML = `
-			<caption><strong>Résultats via ${api}</strong></caption>
-			<tr><th>Éditeur</th><td>${book.publishers?.[0]?.name || book.publisher || "-"}</td></tr>
-			<tr><th>Date</th><td>${book.publish_date || book.publishedDate || "-"}</td></tr>
-			<tr><th>Description</th><td>${book.description || "-"}</td></tr>
-			<tr><th>Nombre de pages</th><td>${book.number_of_pages || book.pageCount || "-"}</td></tr>
-			<tr><th>Type d'impression</th><td>${book.number_of_pages || book.printType || "-"}</td></tr>
-   			<tr><th>Langue</th><td>${book.number_of_pages || book.language || "-"}</td></tr>
-			<tr><th>URL</th><td><a href="${book.url || book.url || '-'}">${book.url || book.url || "-"}</a></td></tr>
-			<tr><th>ID</th><td>${book.key || book.key || "-"}</td></tr>
-			<tr><th>Cover</th><td><img src="${book.cover.medium || ''}" alt="medium cover"></td></tr>
-			`;
-		resultsDiv.appendChild(table);
-	}
-
-	function renderError(api, message) {
-		const resultsDiv = document.getElementById("results");
-		const error = document.createElement("p");
-		error.innerHTML = `<strong>${api}</strong> : ${message}`;
-		error.style.color = "red";
-		resultsDiv.appendChild(error);
-	}
-  
-});
+};
