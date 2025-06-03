@@ -81,8 +81,8 @@ async function fetchBookData() {
 		"Pages": d => d.number_of_pages || d.pageCount || "-",
 		"Type d'impression": d => d.printType || "-",
 		"Langue": d => d.language || "-",
-		"ID": d => d.key || d.id || "-",
-		"URL": d => d.url ? `<a href="${d.url}">${d.url}</a>` : "-",
+		//"ID": d => d.key || d.id || "-",
+		//"URL": d => d.url ? `<a href="${d.url}">${d.url}</a>` : "-",
 		"Couverture": d => d.cover?.medium ? `<img src="${d.cover.medium}" height="100">` : "-"
 	};
 
