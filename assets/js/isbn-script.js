@@ -68,13 +68,7 @@ document.addEventListener("DOMContentLoaded", function () {
 			<caption><strong>Résultats via ${api}</strong></caption>
 			<tr><th>Titre</th><td>${book.title || "-"}</td></tr>
 			<tr><th>Auteur</th><td>${(book.authors.map(a => a.name).join(", ") || book.authors?.[0] || "-")}</td></tr>
-			<tr><th>Éditeur</th><td>${book.publishers?.[0]?.name || book.publisher || "-"}</td></tr>
-			<tr><th>Date</th><td>${book.publish_date || book.publishedDate || "-"}</td></tr>
-			<tr><th>Nombre de pages</th><td>${book.number_of_pages || book.number_of_pages || "-"}</td></tr>
-			<tr><th>URL</th><td><a href="${book.url || book.url || "-"}">${book.url || book.url || "-"}</a></td></tr>
-			<tr><th>ID</th><td>${book.key || book.key || "-"}</td></tr>	
-			<tr><th>ISBN</th><td>${book.identifiers?.isbn_13?.[0] || book.industryIdentifiers?.[0]?.identifier || "-"}</td></tr>
-			<tr><th>Cover</th><td><img src="${book.cover.medium || ''}" alt="medium cover"></td></tr>
+
 			`;
 		resultsDiv.appendChild(table);
 	}
