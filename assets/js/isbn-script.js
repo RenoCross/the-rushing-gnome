@@ -29,7 +29,8 @@ document.addEventListener("DOMContentLoaded", function () {
 					const res = await fetch(`https://openlibrary.org/api/books?bibkeys=ISBN:${isbn}&format=json&jscmd=data`);
 					const jsonData = await res.json();
 					data = jsonData[`ISBN:${isbn}`];
-					jsonOutput.textContent += `\n[OpenLibrary]\n` + JSON.stringify(jsonData, null, 2);
+					jsonOutput.textContent += `\n[OpenLibrary - Raw result]\n` + JSON.stringify(jsonData, null, 2) + ` <br>` ;
+					jsonOutput.textContent += `\n[OpenLibrary]\n` + JSON.stringify(data, null, 2);
 				} else if (api === "google") {
 					const res = await fetch(`https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}`);
 					const jsonData = await res.json();
@@ -74,6 +75,11 @@ document.addEventListener("DOMContentLoaded", function () {
 			<tr><th>Date</th><td>${book.publish_date || book.publishedDate || "-"}</td></tr>
 			<tr><th>Description</th><td>${book.description || "-"}</td></tr>
 			<tr><th>Nombre de pages</th><td>${book.number_of_pages || book.pageCount || "-"}</td></tr>
+			<tr><th>Type d'impression</th><td>${book.number_of_pages || book.printType || "-"}</td></tr>
+   			<tr><th>Langue</th><td>${book.number_of_pages || book.language || "-"}</td></tr>
+			<tr><th>URL</th><td><a href="${book.url || book.url || '-'}">${book.url || book.url || "-"}</a></td></tr>
+			<tr><th>ID</th><td>${book.key || book.key || "-"}</td></tr>
+			<tr><th>Cover</th><td><img src="${book.cover.medium || ''}" alt="medium cover"></td></tr>
 			`;
 		resultsDiv.appendChild(table);
 	}
