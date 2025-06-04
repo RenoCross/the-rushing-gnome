@@ -73,7 +73,7 @@ async function fetchBookData() {
 
 	const fields = {
 		"ISBN": d => d.identifiers?.isbn_13?.[0] || d.industryIdentifiers.map(a => a.identifier).join(", ") || "-",
-		"Titre": d => d.title || "-",
+		"Titre": d => d.title || d.details.title || "-",
 		"Sous-titre": d => d.subtitle || "-",
 		"Auteur": d => d.authors.map(a => a.name).join(", ") || d.authors?.[0] || "-",
 		"Éditeur": d => d.publishers?.[0]?.name || d.publisher || "-",
@@ -82,11 +82,11 @@ async function fetchBookData() {
 		"Description": d => d.description || "-",
 		"Pages": d => d.number_of_pages || d.pageCount || "-",
 		"Type d'impression": d => d.printType || "-",
-		"Langue": d => d.language || "-"
+		"Langue": d => d.language || "-",
 		
 		//"ID": d => d.key || d.id || "-",
 		//"URL": d => d.url ? `<a href="${d.url}">${d.url}</a>` || "-",
-		//"Couverture": d => d.cover?.medium ? `<img src="${d.cover.medium}" height="100">` : "-"
+		"Couverture": d => d.cover?.medium ? `<img src="${d.cover.medium}" alt="cover">` ||  d.details.thumbnail_url `<img src="${d.details.thumbnail_url}" alt="cover">` || "-"
 	};
 
 	for (const label in fields) {
