@@ -29,7 +29,8 @@ async function fetchBookData() {
 		try {
 			let data;
 			if (api === "openlibrary") {
-				const res = await fetch(`https://openlibrary.org/api/books?bibkeys=ISBN:${isbn}&format=json&jscmd=data`);
+				//const res = await fetch(`https://openlibrary.org/api/books?bibkeys=ISBN:${isbn}&format=json&jscmd=data`);
+				const res = await fetch(`https://openlibrary.org/api/books?bibkeys=ISBN:${isbn}&format=json&jscmd=details`);				
 				const jsonData = await res.json();
 				data = jsonData[`ISBN:${isbn}`];
 				jsonOutput.textContent += `\n[OpenLibrary]\n` + JSON.stringify(data, null, 2);
@@ -81,6 +82,7 @@ async function fetchBookData() {
 		"Pages": d => d.number_of_pages || d.pageCount || "-",
 		"Type d'impression": d => d.printType || "-",
 		"Langue": d => d.language || "-",
+		
 		"ID": d => d.key || d.id || "-",
 		"URL": d => d.url ? `<a href="${d.url}">${d.url}</a>` : "-",
 		"Couverture": d => d.cover?.medium ? `<img src="${d.cover.medium}" height="100">` : "-"
