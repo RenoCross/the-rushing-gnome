@@ -29,8 +29,8 @@ async function fetchBookData() {
 		try {
 			let data;
 			if (api === "openlibrary") {
-				//const res = await fetch(`https://openlibrary.org/api/books?bibkeys=ISBN:${isbn}&format=json&jscmd=data`);
-				const res = await fetch(`https://openlibrary.org/api/books?bibkeys=ISBN:${isbn}&format=json&jscmd=details`);				
+				const res = await fetch(`https://openlibrary.org/api/books?bibkeys=ISBN:${isbn}&format=json&jscmd=data`);
+				//const res = await fetch(`https://openlibrary.org/api/books?bibkeys=ISBN:${isbn}&format=json&jscmd=details`);				
 				const jsonData = await res.json();
 				data = jsonData[`ISBN:${isbn}`];
 				jsonOutput.textContent += `\n[OpenLibrary]\n` + JSON.stringify(data, null, 2);
