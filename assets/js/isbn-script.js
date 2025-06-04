@@ -57,7 +57,7 @@ async function fetchBookData() {
 		}
 	}
 
-	renderUnifiedTable(allData);
+	//renderUnifiedTable(allData);
 }
 
 	function renderUnifiedTable(allData) {
