@@ -28,18 +28,18 @@ async function fetchBookData() {
 	for (const api of selectedApis) {
 		try {
 			let data;
-			if (api === "openlibrary") {
-				const res = await fetch(`https://openlibrary.org/api/books?bibkeys=ISBN:${isbn}&format=json&jscmd=data`);
-				//const res = await fetch(`https://openlibrary.org/api/books?bibkeys=ISBN:${isbn}&format=json&jscmd=details`);				
+			if (api === "OpenLibrary") {
+				//const res = await fetch(`https://openlibrary.org/api/books?bibkeys=ISBN:${isbn}&format=json&jscmd=data`);
+				const res = await fetch(`https://openlibrary.org/api/books?bibkeys=ISBN:${isbn}&format=json&jscmd=details`);				
 				const jsonData = await res.json();
 				data = jsonData[`ISBN:${isbn}`];
 				jsonOutput.textContent += `\n[OpenLibrary]\n` + JSON.stringify(data, null, 2);
-			} else if (api === "google") {
+			} else if (api === "GoogleBooks") {
 				const res = await fetch(`https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}`);
 				const jsonData = await res.json();
 				data = jsonData.items?.[0]?.volumeInfo;
 				jsonOutput.textContent += `\n[Google Books]\n` + JSON.stringify(data, null, 2);
-			} else if (api === "isbndb") {
+			} else if (api === "ISBNdb") {
 				const res = await fetch(`https://api.isbndb.com/book/${isbn}`, {
 					headers: {
 						"Authorization": "YOUR_ISBNDB_API_KEY"
@@ -77,15 +77,16 @@ async function fetchBookData() {
 		"Sous-titre": d => d.subtitle || "-",
 		"Auteur": d => d.authors.map(a => a.name).join(", ") || d.authors?.[0] || "-",
 		"Éditeur": d => d.publishers?.[0]?.name || d.publisher || "-",
+		"Places": d => d.publish_places || "-",		
 		"Date": d => d.publish_date || d.publishedDate || "-",
 		"Description": d => d.description || "-",
 		"Pages": d => d.number_of_pages || d.pageCount || "-",
 		"Type d'impression": d => d.printType || "-",
 		"Langue": d => d.language || "-",
 		
-		"ID": d => d.key || d.id || "-",
-		"URL": d => d.url ? `<a href="${d.url}">${d.url}</a>` : "-",
-		"Couverture": d => d.cover?.medium ? `<img src="${d.cover.medium}" height="100">` : "-"
+		\\"ID": d => d.key || d.id || "-",
+		\\"URL": d => d.url ? `<a href="${d.url}">${d.url}</a>` || "-",
+		\\"Couverture": d => d.cover?.medium ? `<img src="${d.cover.medium}" height="100">` : "-"
 	};
 
 	for (const label in fields) {
