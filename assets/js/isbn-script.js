@@ -110,11 +110,20 @@ function renderUnifiedTable(allData, req) {
 			|| "-",
 		"Type d'impression": d => d.details?.printType || d.printType || "-",
 		//"Langue": d => d.language || d.details?.language || "-",
-		"Library of Congress Classification": d => d.classifications?.lc_classifications || d.details?.lc_classifications || "-",	
-		"Classification décimale Dewey": d => d.classifications?.dewey_decimal_class || d.details?.dewey_decimal_class || "-"
+		"Library of Congress Classification": d => 
+			d.classifications?.lc_classifications 
+			|| d.details?.lc_classifications 
+			|| "-",	
+		"Classification décimale Dewey": d =>
+			d.classifications?.dewey_decimal_class 
+			|| d.details?.dewey_decimal_class 
+			|| "-"
 		//"ID": d => d.key || d.details?.key || d.id || "-"
 		//"URL": d => d.url ? `<a href="${d.url}">${d.url}</a>` || "-",
-		//"Couverture": d => `<img src="${d.cover.small}" alt="cover">` ||  `<img src="${d.details.thumbnail_url}" alt="cover">` || "-"
+		"Couverture": d => 
+			`<img src="${d.cover.small}" alt="cover">` 
+			||  `<img src="${d.details.thumbnail_url}" alt="cover">` 
+			|| "-"
 	};
 
 	for (const label in fields) {
