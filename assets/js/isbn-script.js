@@ -72,7 +72,7 @@ async function fetchBookData() {
 	table.appendChild(headerRow);
 
 	const fields = {
-		"ISBN": d => d.identifiers?.ISBN_13? || d.details?.ISBN_13 || d.industryIdentifiers?.map(a => a.identifier).join(", ") || "-",
+		"ISBN": d => d.identifiers?.isbn_13 || d.details?.identifiers?.isbn_13 || d.industryIdentifiers?.map(a => a.identifier).join(", ") || "-",
 		"Titre": d => d.title || d.details?.title || "-",
 		"Sous-titre": d => d.subtitle || d.details?.subtitle || "-",
 		"Auteur": d => d.authors?.map(a => a.name).join(", ") || d.details?.authors?.map(a => a.name).join(", ") || d.authors?.[0] || "-",
