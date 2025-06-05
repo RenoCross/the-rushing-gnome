@@ -79,7 +79,7 @@ function renderUnifiedTable(allData, req) {
 	table.appendChild(headerRow);
 
 	const fields = {
-		"Requête": d => d.title || d.details?.title || "-",		
+		"Requête": req,		
 		//"ISBN": d => d.identifiers?.isbn_13 || d.details?.isbn_13 || d.details?.identifiers?.isbn_13 || d.industryIdentifiers?.map(a => a.identifier).join(", ") || "-",
 		"ISBN": d =>
 			d.details?.isbn_13
