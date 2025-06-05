@@ -121,7 +121,7 @@ function renderUnifiedTable(allData, req) {
 		"Classification décimale Dewey": d =>
 			d.classifications?.dewey_decimal_class 
 			|| d.details?.dewey_decimal_class 
-			|| "-"
+			|| "-",
 		//"ID": d => d.key || d.details?.key || d.id || "-"
 		//"URL": d => d.url ? `<a href="${d.url}">${d.url}</a>` || "-",
 		"Couverture": d => 
