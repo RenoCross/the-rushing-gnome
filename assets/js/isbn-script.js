@@ -28,12 +28,16 @@ async function fetchBookData() {
 	for (const api of selectedApis) {
 		try {
 			let data;
-			if (api === "OpenLibrary") {
-				//const res = await fetch(`https://openlibrary.org/api/books?bibkeys=ISBN:${isbn}&format=json&jscmd=data`);
-				const res = await fetch(`https://openlibrary.org/api/books?bibkeys=ISBN:${isbn}&format=json&jscmd=details`);				
+			if (api === "OpenLibrary data") {
+				const res = await fetch(`https://openlibrary.org/api/books?bibkeys=ISBN:${isbn}&format=json&jscmd=data`);				
 				const jsonData = await res.json();
 				data = jsonData[`ISBN:${isbn}`];
 				jsonOutput.textContent += `\n[OpenLibrary]\n` + JSON.stringify(data, null, 2);
+			} else if (api === "OpenLibrary details") {
+				const res = await fetch(`https://openlibrary.org/api/books?bibkeys=ISBN:${isbn}&format=json&jscmd=details`);				
+				const jsonData = await res.json();
+				data = jsonData[`ISBN:${isbn}`];
+				jsonOutput.textContent += `\n[OpenLibrary]\n` + JSON.stringify(data, null, 2);				
 			} else if (api === "GoogleBooks") {
 				const res = await fetch(`https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}`);
 				const jsonData = await res.json();
@@ -73,13 +77,11 @@ async function fetchBookData() {
 
 	const fields = {
 		//"ISBN": d => d.identifiers?.isbn_13 || d.details?.isbn_13 || d.details?.identifiers?.isbn_13 || d.industryIdentifiers?.map(a => a.identifier).join(", ") || "-",
-
 		"ISBN": d =>
 			d.details?.isbn_13
 			|| (Array.isArray(d.details?.isbn_13) ? d.details.isbn_13.join(", ") : d.details?.isbn_13)
 			|| d.industryIdentifiers?.map(a => a.identifier).join(", ") 
 			|| "-",
-		
 		"Titre": d => d.title || d.details?.title || "-",
 		"Sous-titre": d => d.subtitle || d.details?.subtitle || "-",
 		"Auteur": d => d.authors?.map(a => a.name).join(", ") || d.details?.authors?.map(a => a.name).join(", ") || d.authors?.[0] || "-",
