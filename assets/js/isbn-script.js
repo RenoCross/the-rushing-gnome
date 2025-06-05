@@ -37,7 +37,7 @@ async function fetchBookData() {
 				const res = await fetch(`https://openlibrary.org/api/books?bibkeys=ISBN:${isbn}&format=json&jscmd=details`);				
 				const jsonData = await res.json();
 				data = jsonData[`ISBN:${isbn}`];
-				jsonOutput.textContent += `\n[OpenLibrary]\n` + JSON.stringify(data, null, 2);				
+				jsonOutput.textContent += `\n[OpenLibrary details]\n` + JSON.stringify(data, null, 2);				
 			} else if (api === "GoogleBooks") {
 				const res = await fetch(`https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}`);
 				const jsonData = await res.json();
