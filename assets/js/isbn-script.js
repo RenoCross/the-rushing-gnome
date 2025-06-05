@@ -29,17 +29,20 @@ async function fetchBookData() {
 		try {
 			let data;
 			if (api === "OpenLibrary_data") {
-				const res = await fetch(`https://openlibrary.org/api/books?bibkeys=ISBN:${isbn}&format=json&jscmd=data`);				
+				const req = "`https://openlibrary.org/api/books?bibkeys=ISBN:${isbn}&format=json&jscmd=data`"
+				const res = await fetch(req);				
 				const jsonData = await res.json();
 				data = jsonData[`ISBN:${isbn}`];
 				jsonOutput.textContent += `\n[OpenLibrary]\n` + JSON.stringify(data, null, 2);
 			} else if (api === "OpenLibrary_details") {
-				const res = await fetch(`https://openlibrary.org/api/books?bibkeys=ISBN:${isbn}&format=json&jscmd=details`);				
+				const req = "`https://openlibrary.org/api/books?bibkeys=ISBN:${isbn}&format=json&jscmd=details`"
+				const res = await fetch(req);			
 				const jsonData = await res.json();
 				data = jsonData[`ISBN:${isbn}`];
 				jsonOutput.textContent += `\n[OpenLibrary details]\n` + JSON.stringify(data, null, 2);				
 			} else if (api === "GoogleBooks") {
-				const res = await fetch(`https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}`);
+				const req = "`https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}`"
+				const res = await fetch(req);
 				const jsonData = await res.json();
 				data = jsonData.items?.[0]?.volumeInfo;
 				jsonOutput.textContent += `\n[Google Books]\n` + JSON.stringify(data, null, 2);
@@ -64,7 +67,7 @@ async function fetchBookData() {
 	renderUnifiedTable(allData);
 }
 
-	function renderUnifiedTable(allData) {
+function renderUnifiedTable(allData, req) {
 	const resultsDiv = document.getElementById("results");
 	const table = document.createElement("table");
 	table.border = "1";
@@ -76,6 +79,7 @@ async function fetchBookData() {
 	table.appendChild(headerRow);
 
 	const fields = {
+		"Requête": d => d.title || d.details?.title || "-",		
 		//"ISBN": d => d.identifiers?.isbn_13 || d.details?.isbn_13 || d.details?.identifiers?.isbn_13 || d.industryIdentifiers?.map(a => a.identifier).join(", ") || "-",
 		"ISBN": d =>
 			d.details?.isbn_13
