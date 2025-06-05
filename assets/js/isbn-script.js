@@ -72,7 +72,8 @@ async function fetchBookData() {
 	table.appendChild(headerRow);
 
 	const fields = {
-		"ISBN": d => d.identifiers?.isbn_13 || d.details?.isbn_13 || d.details?.identifiers?.isbn_13 || d.industryIdentifiers?.map(a => a.identifier).join(", ") || "-",
+		//"ISBN": d => d.identifiers?.isbn_13 || d.details?.isbn_13 || d.details?.identifiers?.isbn_13 || d.industryIdentifiers?.map(a => a.identifier).join(", ") || "-",
+		"ISBN": d => d.details?.isbn_13 || d.industryIdentifiers?.map(a => a.identifier).join(", ") || "-",		
 		"Titre": d => d.title || d.details?.title || "-",
 		"Sous-titre": d => d.subtitle || d.details?.subtitle || "-",
 		"Auteur": d => d.authors?.map(a => a.name).join(", ") || d.details?.authors?.map(a => a.name).join(", ") || d.authors?.[0] || "-",
@@ -81,7 +82,7 @@ async function fetchBookData() {
 		"Date": d => d.publish_date || d.details?.publish_date || d.publishedDate || "-",
 		"Description": d => d.description || d.details?.description || "-",
 		"Pages": d => d.number_of_pages || d.details?.number_of_pages || d.pageCount || "-",
-		//"Type d'impression": d => d.details?.physical_format || d.printType || "-",
+		"Type d'impression": d => d.details?.physical_format || d.printType || "-",
 		//"Langue": d => d.language || d.details?.language || "-",
 		"Library of Congress Classification": d => d.classifications?.lc_classifications || d.details?.lc_classifications || "-",	
 		"Classification décimale Dewey": d => d.classifications?.dewey_decimal_class || d.details?.dewey_decimal_class || "-"		
