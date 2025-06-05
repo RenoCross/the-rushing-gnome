@@ -75,8 +75,8 @@ async function fetchBookData() {
 		//"ISBN": d => d.identifiers?.isbn_13?.[0] || d.details?.isbn_13 || d.industryIdentifiers?.map(a => a.identifier).join(", ") || "-",
 		"Titre": d => d.title || d.details?.title || "-",
 		"Sous-titre": d => d.subtitle || d.details?.subtitle || "-",
-		"Auteur": d => d.authors?.map(a => a.name).join(", ") || d.details?.authors?.map(a => a.name).join(", ") || d.authors?.[0] || "-"
-		//"Éditeur": d => d.publishers?.[0]?.name || d.details?.publishers?.[0]?.name || d.publisher || "-",
+		"Auteur": d => d.authors?.map(a => a.name).join(", ") || d.details?.authors?.map(a => a.name).join(", ") || d.authors?.[0] || "-",
+		"Éditeur": d => d.publishers?.[0]?.name || d.details?.publishers?.[0]?.name || d.publisher || "-"
 		//"Places": d => d.publish_places || d.details?.publish_places || "-",		
 		//"Date": d => d.publish_date || d.details?.publish_date || d.publishedDate || "-",
 		//"Description": d => d.description || d.details?.description || "-",
