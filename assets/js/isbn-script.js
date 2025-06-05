@@ -28,12 +28,12 @@ async function fetchBookData() {
 	for (const api of selectedApis) {
 		try {
 			let data;
-			if (api === "OpenLibrary data") {
+			if (api === "OpenLibrary_data") {
 				const res = await fetch(`https://openlibrary.org/api/books?bibkeys=ISBN:${isbn}&format=json&jscmd=data`);				
 				const jsonData = await res.json();
 				data = jsonData[`ISBN:${isbn}`];
 				jsonOutput.textContent += `\n[OpenLibrary]\n` + JSON.stringify(data, null, 2);
-			} else if (api === "OpenLibrary details") {
+			} else if (api === "OpenLibrary_details") {
 				const res = await fetch(`https://openlibrary.org/api/books?bibkeys=ISBN:${isbn}&format=json&jscmd=details`);				
 				const jsonData = await res.json();
 				data = jsonData[`ISBN:${isbn}`];
