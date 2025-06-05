@@ -57,7 +57,7 @@ async function fetchBookData() {
 		}
 	}
 
-	renderUnifiedTable(allData);
+	renderUnifiedTable(allData, req);
 }
 
 function renderUnifiedTable(allData, req) {
@@ -68,7 +68,7 @@ function renderUnifiedTable(allData, req) {
 
 	// Entêtes
 	const headerRow = document.createElement("tr");
-	headerRow.innerHTML = `<th>Champ</th>${Object.keys(allData).map(api => `<th>${api}<br>JSON.stringify(allData[${api}], null, 2)</th>`).join("")}`;
+	headerRow.innerHTML = `<th>Champ</th>${Object.keys(allData).map(api => `<th>${api}<br>`JSON.stringify(allData[${api}], null, 2)`</th>`).join("")}`;
 	table.appendChild(headerRow);
 
 	const fields = {
@@ -108,7 +108,7 @@ function renderUnifiedTable(allData, req) {
 			|| d.details?.number_of_pages 
 			|| d.pageCount 
 			|| "-",
-		"Type d'impression": d => d.details?.physical_format || d.printType || "-",
+		"Type d'impression": d => d.details?.printType || d.printType || "-",
 		//"Langue": d => d.language || d.details?.language || "-",
 		"Library of Congress Classification": d => d.classifications?.lc_classifications || d.details?.lc_classifications || "-",	
 		"Classification décimale Dewey": d => d.classifications?.dewey_decimal_class || d.details?.dewey_decimal_class || "-"
