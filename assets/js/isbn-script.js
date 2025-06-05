@@ -68,7 +68,7 @@ function renderUnifiedTable(allData, req) {
 
 	// Entêtes
 	const headerRow = document.createElement("tr");
-	headerRow.innerHTML = `<th>Champ</th>${Object.keys(allData).map(api => `<th>${api}<br>`JSON.stringify(allData[${api}], null, 2)`</th>`).join("")}`;
+	headerRow.innerHTML = `<th>Champ</th>${Object.keys(allData).map(api => `<th>${api}<br>`JSON.stringify(allData[`${api}`], null, 2)`</th>`).join("")}`;
 	table.appendChild(headerRow);
 
 	const fields = {
