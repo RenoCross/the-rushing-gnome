@@ -48,15 +48,6 @@ async function fetchBookData() {
 				const jsonData = await res.json();
 				data = jsonData.items?.[0]?.volumeInfo;
 				jsonOutput.textContent += `\n[Google Books]\n` + JSON.stringify(data, null, 2);
-			} else if (api === "ISBNdb") {
-				const res = await fetch(`https://api.isbndb.com/book/${isbn}`, {
-					headers: {
-						"Authorization": "YOUR_ISBNDB_API_KEY"
-					}
-				});
-				const json = await res.json();
-				data = json.book;
-				jsonOutput.textContent += `\n[ISBNdb]\n` + JSON.stringify(data, null, 2);
 			}
 
 			allData[api] = data || {};
@@ -82,7 +73,6 @@ function renderUnifiedTable(allData, req) {
 
 	const fields = {
 		"Requête": req,		
-		//"ISBN": d => d.identifiers?.isbn_13 || d.details?.isbn_13 || d.details?.identifiers?.isbn_13 || d.industryIdentifiers?.map(a => a.identifier).join(", ") || "-",
 		"ISBN": d =>
 			d.details?.isbn_13
 			|| (Array.isArray(d.details?.isbn_13) ? d.details.isbn_13.join(", ") : d.details?.isbn_13)
@@ -90,12 +80,34 @@ function renderUnifiedTable(allData, req) {
 			|| "-",
 		"Titre": d => d.title || d.details?.title || "-",
 		"Sous-titre": d => d.subtitle || d.details?.subtitle || "-",
-		"Auteur": d => d.authors?.map(a => a.name).join(", ") || d.details?.authors?.map(a => a.name).join(", ") || d.authors?.[0] || "-",
-		"Éditeur": d => d.publishers?.[0]?.name || d.details?.publishers || d.publisher || "-",
-		"Lieu d'édition": d => d.publish_places || d.details?.publish_places || "-",		
-		"Date": d => d.publish_date || d.details?.publish_date || d.publishedDate || "-",
-		"Description": d => d.description || d.details?.description || "-",
-		"Pages": d => d.number_of_pages || d.details?.number_of_pages || d.pageCount || "-",
+		"Auteur": d =>
+			(d.authors?.map(a => a.name).join(", "))
+			|| (d.details?.authors?.map(a => a.name).join(", "))
+			|| d.authors?.[0]
+			|| "-",
+		"Éditeur": d => 
+			(d.publishers?.map(a => a.name).join(", "))
+			|| d.details?.publishers
+			|| d.publisher
+			|| "-",
+		"Lieu d'édition": d => 
+			d.publish_places 
+			|| d.details?.publish_places 
+			|| "-",		
+		"Date": d => 
+			d.publish_date 
+			|| d.details?.publish_date 
+			|| d.publishedDate 
+			|| "-",
+		"Description": d => 
+			d.description 
+			|| d.details?.description 
+			|| "-",
+		"Pages": d => 
+			d.number_of_pages 
+			|| d.details?.number_of_pages 
+			|| d.pageCount 
+			|| "-",
 		"Type d'impression": d => d.details?.physical_format || d.printType || "-",
 		//"Langue": d => d.language || d.details?.language || "-",
 		"Library of Congress Classification": d => d.classifications?.lc_classifications || d.details?.lc_classifications || "-",	
@@ -109,7 +121,11 @@ function renderUnifiedTable(allData, req) {
 		const row = document.createElement("tr");
 		const cells = Object.entries(allData).map(([api, data]) => {
 			if (data?.error) return `<td style="color:red;">${data.error}</td>`;
-			return `<td>${fields[label](data)}</td>`;
+			try {
+				return `<td>${fields[label](data)}</td>`;
+			} catch {
+				return `<td>-</td>`;
+			}
 		});
 		row.innerHTML = `<th>${label}</th>${cells.join("")}`;
 		table.appendChild(row);
@@ -118,33 +134,32 @@ function renderUnifiedTable(allData, req) {
 	resultsDiv.appendChild(table);
 }
 
+function renderTable(api, book) {
+	const resultsDiv = document.getElementById("results");
+	const table = document.createElement("table");
+	table.border = "1";
+	table.style.marginTop = "1rem";
+	table.innerHTML = `
+		<caption><strong>Résultats via ${api}</strong></caption>
+		<tr><th>Éditeur</th><td>${book.publishers?.[0]?.name || book.publisher || "-"}</td></tr>
+		<tr><th>Date</th><td>${book.publish_date || book.publishedDate || "-"}</td></tr>
+		<tr><th>Description</th><td>${book.description || "-"}</td></tr>
+		<tr><th>Nombre de pages</th><td>${book.number_of_pages || book.pageCount || "-"}</td></tr>
+		<tr><th>Type d'impression</th><td>${book.number_of_pages || book.printType || "-"}</td></tr>
+		<tr><th>Langue</th><td>${book.number_of_pages || book.language || "-"}</td></tr>
+		<tr><th>URL</th><td><a href="${book.url || book.url || '-'}">${book.url || book.url || "-"}</a></td></tr>
+		<tr><th>ID</th><td>${book.key || book.key || "-"}</td></tr>
+		<tr><th>Cover</th><td><img src="${book.cover.medium || ''}" alt="medium cover"></td></tr>
+		`;
+	resultsDiv.appendChild(table);
+}
 
-	function renderTable(api, book) {
-		const resultsDiv = document.getElementById("results");
-		const table = document.createElement("table");
-		table.border = "1";
-		table.style.marginTop = "1rem";
-		table.innerHTML = `
-			<caption><strong>Résultats via ${api}</strong></caption>
-			<tr><th>Éditeur</th><td>${book.publishers?.[0]?.name || book.publisher || "-"}</td></tr>
-			<tr><th>Date</th><td>${book.publish_date || book.publishedDate || "-"}</td></tr>
-			<tr><th>Description</th><td>${book.description || "-"}</td></tr>
-			<tr><th>Nombre de pages</th><td>${book.number_of_pages || book.pageCount || "-"}</td></tr>
-			<tr><th>Type d'impression</th><td>${book.number_of_pages || book.printType || "-"}</td></tr>
-   			<tr><th>Langue</th><td>${book.number_of_pages || book.language || "-"}</td></tr>
-			<tr><th>URL</th><td><a href="${book.url || book.url || '-'}">${book.url || book.url || "-"}</a></td></tr>
-			<tr><th>ID</th><td>${book.key || book.key || "-"}</td></tr>
-			<tr><th>Cover</th><td><img src="${book.cover.medium || ''}" alt="medium cover"></td></tr>
-			`;
-		resultsDiv.appendChild(table);
-	}
-
-	function renderError(api, message) {
-		const resultsDiv = document.getElementById("results");
-		const error = document.createElement("p");
-		error.innerHTML = `<strong>${api}</strong> : ${message}`;
-		error.style.color = "red";
-		resultsDiv.appendChild(error);
-	}
+function renderError(api, message) {
+	const resultsDiv = document.getElementById("results");
+	const error = document.createElement("p");
+	error.innerHTML = `<strong>${api}</strong> : ${message}`;
+	error.style.color = "red";
+	resultsDiv.appendChild(error);
+}
   
 });
