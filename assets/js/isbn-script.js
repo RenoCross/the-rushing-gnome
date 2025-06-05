@@ -76,7 +76,7 @@ function renderUnifiedTable(allData, req) {
 	table.appendChild(headerRow);
 
 	const fields = {
-		"Requête": req,		
+		//"Requête": req,		
 		"ISBN": d =>
 			d.details?.isbn_13
 			|| (Array.isArray(d.details?.isbn_13) ? d.details.isbn_13.join(", ") : d.details?.isbn_13)
@@ -121,13 +121,13 @@ function renderUnifiedTable(allData, req) {
 		"Classification décimale Dewey": d =>
 			d.classifications?.dewey_decimal_class 
 			|| d.details?.dewey_decimal_class 
-			|| "-",
+			|| "-"
 		//"ID": d => d.key || d.details?.key || d.id || "-"
 		//"URL": d => d.url ? `<a href="${d.url}">${d.url}</a>` || "-",
-		"Couverture": d => 
-			`<img src="${d.cover.small}" alt="cover">` 
-			||  `<img src="${d.details.thumbnail_url}" alt="cover">` 
-			|| "-"
+		//"Couverture": d => 
+		//	`<img src="${d.cover.small}" alt="cover">` 
+	//		||  `<img src="${d.details.thumbnail_url}" alt="cover">` 
+	//		|| "-"
 	};
 
 	for (const label in fields) {
