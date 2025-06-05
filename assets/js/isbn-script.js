@@ -16,8 +16,10 @@ async function fetchBookData() {
 	const selectedApis = Array.from(document.querySelectorAll('input[name="api"]:checked')).map(input => input.value);
 	const resultsDiv = document.getElementById("results");
 	const jsonOutput = document.getElementById("jsonOutput");
+	
 	resultsDiv.innerHTML = "";
 	jsonOutput.textContent = "";
+	
 	if (!isbn || selectedApis.length === 0) {
 		resultsDiv.innerHTML = "<p>Veuillez entrer un ISBN et sélectionner au moins une API.</p>";
 		return;
@@ -29,19 +31,19 @@ async function fetchBookData() {
 		try {
 			let data;
 			if (api === "OpenLibrary_data") {
-				const req = "`https://openlibrary.org/api/books?bibkeys=ISBN:${isbn}&format=json&jscmd=data`"
+				const req = `https://openlibrary.org/api/books?bibkeys=ISBN:${isbn}&format=json&jscmd=data`;
 				const res = await fetch(req);				
 				const jsonData = await res.json();
 				data = jsonData[`ISBN:${isbn}`];
 				jsonOutput.textContent += `\n[OpenLibrary]\n` + JSON.stringify(data, null, 2);
 			} else if (api === "OpenLibrary_details") {
-				const req = "`https://openlibrary.org/api/books?bibkeys=ISBN:${isbn}&format=json&jscmd=details`"
+				const req = `https://openlibrary.org/api/books?bibkeys=ISBN:${isbn}&format=json&jscmd=details`;
 				const res = await fetch(req);			
 				const jsonData = await res.json();
 				data = jsonData[`ISBN:${isbn}`];
 				jsonOutput.textContent += `\n[OpenLibrary details]\n` + JSON.stringify(data, null, 2);				
 			} else if (api === "GoogleBooks") {
-				const req = "`https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}`"
+				const req = `https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}`
 				const res = await fetch(req);
 				const jsonData = await res.json();
 				data = jsonData.items?.[0]?.volumeInfo;
@@ -75,7 +77,7 @@ function renderUnifiedTable(allData, req) {
 
 	// Entêtes
 	const headerRow = document.createElement("tr");
-	headerRow.innerHTML = `<th>Champ</th>${Object.keys(allData).map(api => `<th>${api}</th>`).join("")}`;
+	headerRow.innerHTML = `<th>Champ</th>${Object.keys(allData).map(api => `<th>${api}<br>JSON.stringify(allData[${api}], null, 2)</th>`).join("")}`;
 	table.appendChild(headerRow);
 
 	const fields = {
@@ -97,7 +99,7 @@ function renderUnifiedTable(allData, req) {
 		"Type d'impression": d => d.details?.physical_format || d.printType || "-",
 		//"Langue": d => d.language || d.details?.language || "-",
 		"Library of Congress Classification": d => d.classifications?.lc_classifications || d.details?.lc_classifications || "-",	
-		"Classification décimale Dewey": d => d.classifications?.dewey_decimal_class || d.details?.dewey_decimal_class || "-"		
+		"Classification décimale Dewey": d => d.classifications?.dewey_decimal_class || d.details?.dewey_decimal_class || "-"
 		//"ID": d => d.key || d.details?.key || d.id || "-"
 		//"URL": d => d.url ? `<a href="${d.url}">${d.url}</a>` || "-",
 		//"Couverture": d => `<img src="${d.cover.small}" alt="cover">` ||  `<img src="${d.details.thumbnail_url}" alt="cover">` || "-"
