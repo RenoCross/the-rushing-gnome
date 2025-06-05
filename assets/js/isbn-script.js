@@ -76,13 +76,15 @@ async function fetchBookData() {
 		"Titre": d => d.title || d.details?.title || "-",
 		"Sous-titre": d => d.subtitle || d.details?.subtitle || "-",
 		"Auteur": d => d.authors?.map(a => a.name).join(", ") || d.details?.authors?.map(a => a.name).join(", ") || d.authors?.[0] || "-",
-		"Éditeur": d => d.publishers?.[0]?.name || d.details?.publishers?.[0]?.name || d.publisher || "-"
+		"Éditeur": d => d.publishers?.[0]?.name || d.details?.publishers?.[0]?.name || d.publisher || "-",
 		//"Places": d => d.publish_places || d.details?.publish_places || "-",		
 		//"Date": d => d.publish_date || d.details?.publish_date || d.publishedDate || "-",
 		//"Description": d => d.description || d.details?.description || "-",
 		//"Pages": d => d.number_of_pages || d.details?.number_of_pages || d.pageCount || "-",
 		//"Type d'impression": d => d.details?.physical_format || d.printType || "-",
 		//"Langue": d => d.language || d.details?.language || "-",
+		"Library of Congress Classification": d => d.classifications?.lc_classifications || d.details?.lc_classifications || "-",	
+		"Classification décimale Dewey": d => d.classifications?.dewey_decimal_class || d.details?.dewey_decimal_class || "-"		
 		//"ID": d => d.key || d.details?.key || d.id || "-"
 		//"URL": d => d.url ? `<a href="${d.url}">${d.url}</a>` || "-",
 		//"Couverture": d => `<img src="${d.cover.small}" alt="cover">` ||  `<img src="${d.details.thumbnail_url}" alt="cover">` || "-"
