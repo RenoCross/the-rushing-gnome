@@ -70,8 +70,14 @@ function renderUnifiedTable(allData, req) {
 	// Entêtes
 	const headerRow = document.createElement("tr");
 	headerRow.innerHTML = `<th>Champ</th>${
-		Object.keys(allData).map(api =>
-			`<th>${api}<br><pre style="max-width:300px; overflow-x:auto;">${JSON.stringify(allData[api], null, 2)}</pre></th>`
+		Object.keys(allData).map(api => 
+			`<th>${api}
+				<br>
+				<details>
+					<summary style="cursor: pointer;">Voir JSON</summary>
+					<pre style="max-width: 300px; overflow-x: auto; white-space: pre-wrap;">${JSON.stringify(allData[api], null, 2)}</pre>
+				</details>
+			</th>`			
 					).join("")
 	}`;
 	table.appendChild(headerRow);
