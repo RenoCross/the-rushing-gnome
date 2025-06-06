@@ -32,19 +32,19 @@ async function fetchBookData() {
 		try {
 			let data, req;
 			if (api === "OpenLibrary_data") {
-				const req = `https://openlibrary.org/api/books?bibkeys=ISBN:${isbn}&format=json&jscmd=data`;
+				req = `https://openlibrary.org/api/books?bibkeys=ISBN:${isbn}&format=json&jscmd=data`;
 				const res = await fetch(req);				
 				const jsonData = await res.json();
 				data = jsonData[`ISBN:${isbn}`];
 				jsonOutput.textContent += `\n[OpenLibrary data]\n` + JSON.stringify(data, null, 2);
 			} else if (api === "OpenLibrary_details") {
-				const req = `https://openlibrary.org/api/books?bibkeys=ISBN:${isbn}&format=json&jscmd=details`;
+				req = `https://openlibrary.org/api/books?bibkeys=ISBN:${isbn}&format=json&jscmd=details`;
 				const res = await fetch(req);			
 				const jsonData = await res.json();
 				data = jsonData[`ISBN:${isbn}`];
 				jsonOutput.textContent += `\n[OpenLibrary details]\n` + JSON.stringify(data, null, 2);				
 			} else if (api === "GoogleBooks") {
-				const req = `https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}`
+				req = `https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}`
 				const res = await fetch(req);
 				const jsonData = await res.json();
 				data = jsonData.items?.[0]?.volumeInfo;
