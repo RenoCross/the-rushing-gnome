@@ -77,7 +77,7 @@ function renderUnifiedTable(allData, req) {
 	table.appendChild(headerRow);
 
 	const fields = {
-		"Requête": req,		
+		"Requête": (d, api) => reqs[api] || "-",	
 		"ISBN": d =>
 			d.details?.isbn_13
 			|| (Array.isArray(d.details?.isbn_13) ? d.details.isbn_13.join(", ") : d.details?.isbn_13)
@@ -136,7 +136,10 @@ function renderUnifiedTable(allData, req) {
 		const cells = Object.entries(allData).map(([api, data]) => {
 			if (data?.error) return `<td style="color:red;">${data.error}</td>`;
 			try {
-				return `<td>${fields[label](data)}</td>`;
+				const value = fields[label].length === 2
+					? fields[label](data, api)
+					: fields[label](data);
+				return `<td>${value}</td>`;
 			} catch {
 				return `<td>-</td>`;
 			}
