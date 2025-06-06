@@ -36,17 +36,26 @@ async function fetchBookData() {
 				const res = await fetch(req);				
 				const jsonData = await res.json();
 				data = jsonData[`ISBN:${isbn}`];
+				if (!data) {
+					throw new Error("ISBN non trouvé dans OpenLibrary (data)");
+				}
 				jsonOutput.textContent += `\n[OpenLibrary data]\n` + JSON.stringify(data, null, 2);
 			} else if (api === "OpenLibrary_details") {
 				req = `https://openlibrary.org/api/books?bibkeys=ISBN:${isbn}&format=json&jscmd=details`;
 				const res = await fetch(req);			
 				const jsonData = await res.json();
 				data = jsonData[`ISBN:${isbn}`];
+				if (!data) {
+					throw new Error("ISBN non trouvé dans OpenLibrary (details)");
+				}				
 				jsonOutput.textContent += `\n[OpenLibrary details]\n` + JSON.stringify(data, null, 2);				
 			} else if (api === "GoogleBooks") {
 				req = `https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}`
 				const res = await fetch(req);
 				const jsonData = await res.json();
+				if (!jsonData.items?.[0]) {
+					throw new Error("ISBN non trouvé dans Google Books");
+				}				
 				data = jsonData.items?.[0]?.volumeInfo;
 				jsonOutput.textContent += `\n[Google Books]\n` + JSON.stringify(data, null, 2);
 			}
