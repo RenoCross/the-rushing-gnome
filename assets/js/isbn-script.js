@@ -107,7 +107,7 @@ function renderUnifiedTable(allData, req) {
 			|| d.publisher
 			|| "-",
 		"Lieu d'édition": d => 
-			d.publish_places 
+			(d.publish_places?.map(a => a.name).join(", "))
 			|| d.details?.publish_places 
 			|| "-",		
 		"Date": d => 
