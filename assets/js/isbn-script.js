@@ -94,11 +94,16 @@ function renderUnifiedTable(allData, req) {
 			}
 			return isbnList || "-";
 		},
-		"ISBN_10": d =>
-			d.identifiers?.isbn_10
-			|| d.details?.isbn_10			
-			|| d.industryIdentifiers?.filter(id => id.type === "ISBN_10").map(id => id.identifier)
-			|| "-",		
+		"ISBN_10": d => {
+			const isbnList =
+				d.identifiers?.isbn_10
+				|| d.details?.isbn_10
+				|| d.industryIdentifiers?.filter(id => id.type === "ISBN_10").map(id => id.identifier);		
+			if (Array.isArray(isbnList)) {
+				return isbnList.join(", ");
+			}
+			return isbnList || "-";
+		},	
 		"Titre": d => d.title || d.details?.title || "-",
 		"Sous-titre": d => d.subtitle || d.details?.subtitle || "-",
 		"Auteur": d =>
@@ -147,7 +152,13 @@ function renderUnifiedTable(allData, req) {
 			const fromOL = d.ebooks?.[0]?.preview_url || (d.details?.ocaid ? `https://archive.org/details/${d.details.ocaid}` : null);
 			const link = fromGoogle || fromOL;
 			return link ? `<a href="${link}" target="_blank">Lire / Télécharger</a>` : "-";
-		}
+		},
+		"Prix": d => 
+			d.saleInfo?.listPrice?.amount
+			? `${d.saleInfo.listPrice.amount} ${d.saleInfo.listPrice.currencyCode}`
+			: d.saleInfo?.retailPrice?.amount
+			? `${d.saleInfo.retailPrice.amount} ${d.saleInfo.retailPrice.currencyCode}`
+			: "-",
 		"Library of Congress Classification": d => 
 			d.classifications?.lc_classifications 
 			|| d.details?.lc_classifications 
