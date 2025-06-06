@@ -16,6 +16,7 @@ async function fetchBookData() {
 	const selectedApis = Array.from(document.querySelectorAll('input[name="api"]:checked')).map(input => input.value);
 	const resultsDiv = document.getElementById("results");
 	const jsonOutput = document.getElementById("jsonOutput");
+	const reqs={};
 	
 	resultsDiv.innerHTML = "";
 	jsonOutput.textContent = "";
@@ -29,7 +30,7 @@ async function fetchBookData() {
 
 	for (const api of selectedApis) {
 		try {
-			let data;
+			let data, req;
 			if (api === "OpenLibrary_data") {
 				const req = `https://openlibrary.org/api/books?bibkeys=ISBN:${isbn}&format=json&jscmd=data`;
 				const res = await fetch(req);				
@@ -49,7 +50,7 @@ async function fetchBookData() {
 				data = jsonData.items?.[0]?.volumeInfo;
 				jsonOutput.textContent += `\n[Google Books]\n` + JSON.stringify(data, null, 2);
 			}
-
+			reqs[api] = req;
 			allData[api] = data || {};
 		} catch (err) {
 			console.error(`Erreur API ${api}:`, err);
@@ -57,7 +58,7 @@ async function fetchBookData() {
 		}
 	}
 
-	renderUnifiedTable(allData, req);
+	renderUnifiedTable(allData, reqs);
 }
 
 function renderUnifiedTable(allData, req) {
