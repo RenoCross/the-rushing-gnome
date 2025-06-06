@@ -89,6 +89,11 @@ function renderUnifiedTable(allData, req) {
 			|| d.details?.isbn_13			
 			|| d.industryIdentifiers?.filter(id => id.type === "ISBN_13").map(id => id.identifier);
 			|| "-",
+		"ISBN_10": d =>
+			d.identifiers?.isbn_10
+			|| d.details?.isbn_10			
+			|| d.industryIdentifiers?.filter(id => id.type === "ISBN_10").map(id => id.identifier);
+			|| "-",		
 		"Titre": d => d.title || d.details?.title || "-",
 		"Sous-titre": d => d.subtitle || d.details?.subtitle || "-",
 		"Auteur": d =>
