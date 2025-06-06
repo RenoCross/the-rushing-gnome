@@ -176,7 +176,7 @@ function renderUnifiedTable(allData, req) {
 				d.cover?.medium
 				|| d.cover?.large
 				|| d.cover?.small
-				|| d.details?.thumbnail_url
+				|| d.thumbnail_url
 				|| d.imageLinks?.thumbnail;
 		
 			if (url_cover) {
