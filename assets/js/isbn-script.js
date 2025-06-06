@@ -78,8 +78,9 @@ function renderUnifiedTable(allData, req) {
 
 	const fields = {
 		"Requête": (d, api) => reqs[api] || "-",	
-		"ISBN": d =>
-			d.details?.isbn_13
+		"ISBN_13": d =>
+			d.identifiers?.isbn_13
+			|| d.details?.isbn_13			
 			|| (Array.isArray(d.details?.isbn_13) ? d.details.isbn_13.join(", ") : d.details?.isbn_13)
 			|| d.industryIdentifiers?.map(a => a.identifier).join(", ") 
 			|| "-",
