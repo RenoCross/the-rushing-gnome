@@ -151,7 +151,7 @@ function renderUnifiedTable(allData, req) {
 				(d.accessInfo?.epub?.isAvailable === true || d.accessInfo?.pdf?.isAvailable === true) ? "Oui" :
 				"Non";
 			return is_ebook || "-";
-		}
+		},
 		"Lien eBook (si disponible)": d => {
 			const fromGoogle = d.accessInfo?.webReaderLink || d.accessInfo?.epub?.acsTokenLink;
 			const fromOL = d.ebooks?.[0]?.preview_url || (d.details?.ocaid ? `https://archive.org/details/${d.details.ocaid}` : null);
@@ -164,7 +164,6 @@ function renderUnifiedTable(allData, req) {
 			: d.saleInfo?.retailPrice?.amount
 			? `${d.saleInfo.retailPrice.amount} ${d.saleInfo.retailPrice.currencyCode}`
 			: "-",
-   		*/
 		"Library of Congress Classification": d => 
 			d.classifications?.lc_classifications 
 			|| d.details?.lc_classifications 
