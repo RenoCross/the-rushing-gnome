@@ -63,7 +63,7 @@ async function fetchBookData() {
 			allData[api] = data || {};
 		} catch (err) {
 			console.error(`Erreur API ${api}:`, err);
-			allData[api] = { error: "Erreur lors de la récupération des données." };
+			allData[api] = {error: err.message || "Erreur lors de la récupération des données." };
 		}
 	}
 
