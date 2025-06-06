@@ -137,8 +137,8 @@ function renderUnifiedTable(allData, req) {
 		//"ID": d => d.key || d.details?.key || d.id || "-"
 		//"URL": d => d.url ? `<a href="${d.url}">${d.url}</a>` || "-",
 		"Couverture": d => 
-			`<img src="${d.cover.small}" alt="cover">` 
-			||  `<img src="${d.details.thumbnail_url}" alt="cover">` 
+			`<img src="${d.cover.medium}" alt="cover">` 
+			||  `<img src="${d.thumbnail_url}" alt="cover">` 
 			|| "-"
 	};
 
