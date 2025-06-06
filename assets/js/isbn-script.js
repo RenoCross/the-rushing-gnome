@@ -145,13 +145,13 @@ function renderUnifiedTable(allData, req) {
 				|| d.language
 				|| "-";
 		},	
-		"Format numérique (eBook)": d =>
-			d.accessInfo?.isEbook === true
-			|| (d.saleInfo?.isEbook === true	? "Oui" :
-			d.accessInfo?.epub?.isAvailable === true || d.accessInfo?.pdf?.isAvailable === true ? "Oui" :
-			"Non")
-			|| "-",
-    		/*
+		"Format numérique (eBook)": d => {
+			const is_ebook =
+				(d.accessInfo?.isEbook === true || d.saleInfo?.isEbook === true) ? "Oui" :
+				(d.accessInfo?.epub?.isAvailable === true || d.accessInfo?.pdf?.isAvailable === true) ? "Oui" :
+				"Non";
+			return is_ebook || "-";
+		}
 		"Lien eBook (si disponible)": d => {
 			const fromGoogle = d.accessInfo?.webReaderLink || d.accessInfo?.epub?.acsTokenLink;
 			const fromOL = d.ebooks?.[0]?.preview_url || (d.details?.ocaid ? `https://archive.org/details/${d.details.ocaid}` : null);
@@ -173,8 +173,6 @@ function renderUnifiedTable(allData, req) {
 			d.classifications?.dewey_decimal_class 
 			|| d.details?.dewey_decimal_class 
 			|| "-",
-		//"ID": d => d.key || d.details?.key || d.id || "-"
-		//"URL": d => d.url ? `<a href="${d.url}">${d.url}</a>` || "-",
 		"Couverture": d => {
 			const url_cover =
 				d.cover?.medium
