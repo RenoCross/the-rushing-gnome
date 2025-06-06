@@ -165,7 +165,7 @@ function renderUnifiedTable(allData, req) {
 			const fromGoogle = d.accessInfo?.webReaderLink || d.accessInfo?.epub?.acsTokenLink;
 			const fromOL = d.ebooks?.[0]?.preview_url || (d.details?.ocaid ? `https://archive.org/details/${d.details.ocaid}` : null);
 			const link = fromGoogle || fromOL;
-			return link ? `<a href="${link}" target="_blank">Lire / Télécharger</a>` : "-";
+			return isSafeUrl(link) ? `<a href="${link}" target="_blank" rel="noopener noreferrer">Lire / Télécharger</a>` : "-";
 		},
 		"Prix": d => 
 			d.saleInfo?.listPrice?.amount
@@ -215,5 +215,15 @@ function renderUnifiedTable(allData, req) {
 
 	resultsDiv.appendChild(table);
 }
-  
+
+// Fonction utilitaire pour sécuriser les liens URL
+function isSafeUrl(url) {
+	try {
+		const parsed = new URL(url);
+		return ['http:', 'https:'].includes(parsed.protocol);
+	} catch (e) {
+		return false;
+	}
+}
+	
 });
