@@ -144,14 +144,14 @@ function renderUnifiedTable(allData, req) {
 				|| d.details?.languages?.[0]?.key?.replace("/languages/", "")
 				|| d.language
 				|| "-";
-		},
-		/*		
+		},	
 		"Format numérique (eBook)": d =>
 			d.accessInfo?.isEbook === true || d.saleInfo?.isEbook === true
 				? "Oui"
 				: d.accessInfo?.epub?.isAvailable === true || d.accessInfo?.pdf?.isAvailable === true
 				? "Oui"
 				: "Non",
+    		/*
 		"Lien eBook (si disponible)": d => {
 			const fromGoogle = d.accessInfo?.webReaderLink || d.accessInfo?.epub?.acsTokenLink;
 			const fromOL = d.ebooks?.[0]?.preview_url || (d.details?.ocaid ? `https://archive.org/details/${d.details.ocaid}` : null);
