@@ -135,6 +135,7 @@ function renderUnifiedTable(allData, req) {
 			|| d.pageCount 
 			|| "-",
 		"Type d'impression": d => d.details?.printType || d.printType || "-",
+		/*
 		"Langue": d => {
 			return d.language
 				|| d.details?.languages?.[0]?.key?.replace("/languages/", "")
@@ -159,6 +160,7 @@ function renderUnifiedTable(allData, req) {
 			: d.saleInfo?.retailPrice?.amount
 			? `${d.saleInfo.retailPrice.amount} ${d.saleInfo.retailPrice.currencyCode}`
 			: "-",
+   		*/
 		"Library of Congress Classification": d => 
 			d.classifications?.lc_classifications 
 			|| d.details?.lc_classifications 
