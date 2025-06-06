@@ -136,6 +136,7 @@ function renderUnifiedTable(allData, req) {
 			|| "-",
 		"Type d'impression": d =>
 			d.details?.printType
+			|| d.details?.type?.key?.replace("/type/", "")
 			|| d.printType
 			|| "-",
 		"Langue": d => {
