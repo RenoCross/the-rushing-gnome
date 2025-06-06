@@ -146,11 +146,11 @@ function renderUnifiedTable(allData, req) {
 				|| "-";
 		},	
 		"Format numérique (eBook)": d =>
-			d.accessInfo?.isEbook === true || d.saleInfo?.isEbook === true
-				? "Oui"
-				: d.accessInfo?.epub?.isAvailable === true || d.accessInfo?.pdf?.isAvailable === true
-				? "Oui"
-				: "Non",
+			d.accessInfo?.isEbook === true
+			|| (d.saleInfo?.isEbook === true	? "Oui" :
+			d.accessInfo?.epub?.isAvailable === true || d.accessInfo?.pdf?.isAvailable === true ? "Oui" :
+			"Non")
+			|| "-",
     		/*
 		"Lien eBook (si disponible)": d => {
 			const fromGoogle = d.accessInfo?.webReaderLink || d.accessInfo?.epub?.acsTokenLink;
