@@ -77,7 +77,7 @@ function renderUnifiedTable(allData, req) {
 	table.appendChild(headerRow);
 
 	const fields = {
-		//"Requête": req,		
+		"Requête": req,		
 		"ISBN": d =>
 			d.details?.isbn_13
 			|| (Array.isArray(d.details?.isbn_13) ? d.details.isbn_13.join(", ") : d.details?.isbn_13)
@@ -145,26 +145,6 @@ function renderUnifiedTable(allData, req) {
 		table.appendChild(row);
 	}
 
-	resultsDiv.appendChild(table);
-}
-
-function renderTable(api, book) {
-	const resultsDiv = document.getElementById("results");
-	const table = document.createElement("table");
-	table.border = "1";
-	table.style.marginTop = "1rem";
-	table.innerHTML = `
-		<caption><strong>Résultats via ${api}</strong></caption>
-		<tr><th>Éditeur</th><td>${book.publishers?.[0]?.name || book.publisher || "-"}</td></tr>
-		<tr><th>Date</th><td>${book.publish_date || book.publishedDate || "-"}</td></tr>
-		<tr><th>Description</th><td>${book.description || "-"}</td></tr>
-		<tr><th>Nombre de pages</th><td>${book.number_of_pages || book.pageCount || "-"}</td></tr>
-		<tr><th>Type d'impression</th><td>${book.number_of_pages || book.printType || "-"}</td></tr>
-		<tr><th>Langue</th><td>${book.number_of_pages || book.language || "-"}</td></tr>
-		<tr><th>URL</th><td><a href="${book.url || book.url || '-'}">${book.url || book.url || "-"}</a></td></tr>
-		<tr><th>ID</th><td>${book.key || book.key || "-"}</td></tr>
-		<tr><th>Cover</th><td><img src="${book.cover.medium || ''}" alt="medium cover"></td></tr>
-		`;
 	resultsDiv.appendChild(table);
 }
 
