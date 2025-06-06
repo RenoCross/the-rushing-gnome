@@ -134,14 +134,17 @@ function renderUnifiedTable(allData, req) {
 			|| d.details?.number_of_pages 
 			|| d.pageCount 
 			|| "-",
-		"Type d'impression": d => d.details?.printType || d.printType || "-",
-		/*
+		"Type d'impression": d =>
+			d.details?.printType
+			|| d.printType
+			|| "-",
 		"Langue": d => {
-			return d.language
+			return d.language?.code
 				|| d.details?.languages?.[0]?.key?.replace("/languages/", "")
-				|| d.language?.code
+				|| d.language
 				|| "-";
 		},
+		/*		
 		"Format numérique (eBook)": d =>
 			d.accessInfo?.isEbook === true || d.saleInfo?.isEbook === true
 				? "Oui"
@@ -177,8 +180,8 @@ function renderUnifiedTable(allData, req) {
 				|| d.cover?.large
 				|| d.cover?.small
 				|| d.thumbnail_url
-				|| d.imageLinks?.thumbnail;
-		
+				|| d.imageLinks?.Thumbnail			
+				|| d.imageLinks?.smallThumbnail;
 			if (url_cover) {
 				return `<img src="${url_cover}" alt="cover" style="max-height:150px;">`;
 			}
