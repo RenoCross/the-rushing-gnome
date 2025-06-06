@@ -87,8 +87,7 @@ function renderUnifiedTable(allData, req) {
 		"ISBN_13": d =>
 			d.identifiers?.isbn_13
 			|| d.details?.isbn_13			
-			|| (Array.isArray(d.details?.isbn_13) ? d.details.isbn_13.join(", ") : d.details?.isbn_13)
-			|| d.industryIdentifiers?.map(a => a.identifier).join(", ") 
+			|| d.industryIdentifiers?.filter(id => id.type === "ISBN_13").map(id => id.identifier);
 			|| "-",
 		"Titre": d => d.title || d.details?.title || "-",
 		"Sous-titre": d => d.subtitle || d.details?.subtitle || "-",
