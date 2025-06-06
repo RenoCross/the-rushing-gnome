@@ -83,12 +83,17 @@ function renderUnifiedTable(allData, req) {
 	table.appendChild(headerRow);
 
 	const fields = {
-		"Requête": (d, api) => reqs[api] || "-",	
-		"ISBN_13": d =>
-			d.identifiers?.isbn_13
-			|| d.details?.isbn_13			
-			|| d.industryIdentifiers?.filter(id => id.type === "ISBN_13").map(id => id.identifier)
-			|| "-",
+		"Requête": (d, api) => reqs[api] || "-",
+		"ISBN_13": d => {
+			const isbnList =
+				d.identifiers?.isbn_13
+				|| d.details?.isbn_13
+				|| d.industryIdentifiers?.filter(id => id.type === "ISBN_13").map(id => id.identifier);		
+			if (Array.isArray(isbnList)) {
+				return isbnList.join(", ");
+			}
+			return isbnList || "-";
+		},
 		"ISBN_10": d =>
 			d.identifiers?.isbn_10
 			|| d.details?.isbn_10			
@@ -125,7 +130,24 @@ function renderUnifiedTable(allData, req) {
 			|| d.pageCount 
 			|| "-",
 		"Type d'impression": d => d.details?.printType || d.printType || "-",
-		//"Langue": d => d.language || d.details?.language || "-",
+		"Langue": d => {
+			return d.language
+				|| d.details?.languages?.[0]?.key?.replace("/languages/", "")
+				|| d.language?.code
+				|| "-";
+		},
+		"Format numérique (eBook)": d =>
+			d.accessInfo?.isEbook === true || d.saleInfo?.isEbook === true
+				? "Oui"
+				: d.accessInfo?.epub?.isAvailable === true || d.accessInfo?.pdf?.isAvailable === true
+				? "Oui"
+				: "Non",
+		"Lien eBook (si disponible)": d => {
+			const fromGoogle = d.accessInfo?.webReaderLink || d.accessInfo?.epub?.acsTokenLink;
+			const fromOL = d.ebooks?.[0]?.preview_url || (d.details?.ocaid ? `https://archive.org/details/${d.details.ocaid}` : null);
+			const link = fromGoogle || fromOL;
+			return link ? `<a href="${link}" target="_blank">Lire / Télécharger</a>` : "-";
+		}
 		"Library of Congress Classification": d => 
 			d.classifications?.lc_classifications 
 			|| d.details?.lc_classifications 
@@ -136,10 +158,19 @@ function renderUnifiedTable(allData, req) {
 			|| "-",
 		//"ID": d => d.key || d.details?.key || d.id || "-"
 		//"URL": d => d.url ? `<a href="${d.url}">${d.url}</a>` || "-",
-		"Couverture": d => 
-			`<img src="${d.cover.medium}" alt="cover">` 
-			||  `<img src="${d.thumbnail_url}" alt="cover">` 
-			|| "-"
+		"Couverture": d => {
+			const url_cover =
+				d.cover?.medium
+				|| d.cover?.large
+				|| d.cover?.small
+				|| d.details?.thumbnail_url
+				|| d.imageLinks?.thumbnail;
+		
+			if (url_cover) {
+				return `<img src="${url_cover}" alt="cover" style="max-height:150px;">`;
+			}
+			return "-";
+		}
 	};
 
 	for (const label in fields) {
@@ -160,14 +191,6 @@ function renderUnifiedTable(allData, req) {
 	}
 
 	resultsDiv.appendChild(table);
-}
-
-function renderError(api, message) {
-	const resultsDiv = document.getElementById("results");
-	const error = document.createElement("p");
-	error.innerHTML = `<strong>${api}</strong> : ${message}`;
-	error.style.color = "red";
-	resultsDiv.appendChild(error);
 }
   
 });
