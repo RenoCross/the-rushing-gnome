@@ -8,6 +8,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	const loader = document.getElementById("loader");
 
 	// Créer le bouton Enregistrer
+	let saveBtn; // ← déclaration accessible dans tout le scope	
 	if (!document.getElementById("saveRecord")) {
 		const saveBtn = document.createElement("button");
 		saveBtn.id = "saveRecord";
