@@ -46,8 +46,8 @@ document.addEventListener("DOMContentLoaded", function () {
 		resultsDiv.innerHTML = "";
 		jsonOutput.textContent = "";
 	
-		if (!isbn || selectedApis.length === 0) {
-			resultsDiv.innerHTML = "<p>Veuillez entrer un ISBN et sélectionner au moins une API.</p>";
+		if (!isbn || selectedApis.length === 0 || !isbn.match(/^\d{10}(\d{3})?$/)) {
+			resultsDiv.innerHTML = "<p>Veuillez entrer un ISBN conforme et sélectionner au moins une API.</p>";
 			return;
 		}
 		for (const api of selectedApis) {
