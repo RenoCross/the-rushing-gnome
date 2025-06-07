@@ -271,9 +271,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	// Gestion du formulaire
 	form.addEventListener("submit", async function (e) {
-	e.preventDefault();
-	document.getElementById("loader").style.display = "block";
-	await fetchBookData();
-	document.getElementById("loader").style.display = "none";
+		e.preventDefault();
+		document.getElementById("loader").style.display = "block";
+		await fetchBookData();
+		document.getElementById("loader").style.display = "none";
 	});
 });
