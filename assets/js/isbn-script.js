@@ -275,6 +275,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		document.getElementById("saveRecord").onclick = async () => {
 			console.log("Final record:", finalRecord);
 			alert("Simuler enregistrement: " + JSON.stringify(finalRecord, null, 2));	
+		};
 	}
 
 	// Gestion du formulaire
