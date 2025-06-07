@@ -1,35 +1,39 @@
 // isbn-script.js
 
-import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
-const supabaseUrl = 'https://dvzqvjmaavtvqzeilmcg.supabase.co';
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR2enF2am1hYXZ0dnF6ZWlsbWNnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDc1OTM0OTMsImV4cCI6MjA2MzE2OTQ5M30.rZjwxo4YW6W4ZC2pvm0TGBvTLTkmSpZ8mJCOF3KAdzo';
-const supabase = createClient(supabaseUrl, supabaseKey);
-
-// Connexion
-document.getElementById("login-btn").onclick = async () => {
-  const { user, error } = await supabase.auth.signInWithPassword({
-    email: document.getElementById("email").value,
-    password: document.getElementById("password").value,
-  });
-  document.getElementById("auth-status").textContent = error ? error.message : `Connecté en tant que ${user.email}`;
-};
-
-// Création de compte
-document.getElementById("signup-btn").onclick = async () => {
-  const { user, error } = await supabase.auth.signUp({
-    email: document.getElementById("email").value,
-    password: document.getElementById("password").value,
-  });
-  document.getElementById("auth-status").textContent = error ? error.message : "Compte créé. Veuillez vérifier vos emails.";
-};
-
 // Attendre que le DOM soit prêt
 document.addEventListener("DOMContentLoaded", function () {
+	// Initialiser Supabase
+	const supabaseUrl = 'https://dvzqvjmaavtvqzeilmcg.supabase.co';
+	const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR2enF2am1hYXZ0dnF6ZWlsbWNnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDc1OTM0OTMsImV4cCI6MjA2MzE2OTQ5M30.rZjwxo4YW6W4ZC2pvm0TGBvTLTkmSpZ8mJCOF3KAdzo';
+	const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
+	// Bouton Connexion
+	const loginBtn = document.createElement("button");
+	loginBtn.id = "loginBtn";
+	loginBtn.textContent = "Connexion";
+	loginBtn.style.marginBottom = "1rem";
+	document.body.insertBefore(loginBtn, document.body.firstChild);
+
+	loginBtn.addEventListener("click", async () => {
+		const email = prompt("Email");
+		const password = prompt("Mot de passe");
+		const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+		if (error) {
+			alert("Erreur de connexion : " + error.message);
+			return;
+		}
+		currentUser = data.user;
+		alert(`Bienvenue ${currentUser.email}`);
+		loginBtn.textContent = `Connecté : ${currentUser.email}`;
+		loginBtn.disabled = true;
+	});
+	
+	// --- Variables DOM principales ---	
 	const form = document.getElementById("isbn-form");
 	const resultsDiv = document.getElementById("results");
 	const jsonOutput = document.getElementById("jsonOutput");
 	const loader = document.getElementById("loader");
-
+	
 	// Créer le bouton Enregistrer
 	let saveBtn; // ← déclaration accessible dans tout le scope	
 	if (!document.getElementById("saveRecord")) {
@@ -300,6 +304,36 @@ document.addEventListener("DOMContentLoaded", function () {
 		};
 	}
 
+	// Enregistrement Supabase avec user
+	saveBtn.onclick = async () => {
+		if (!currentUser) {
+			alert("Veuillez vous connecter avant d’enregistrer.");
+			return;
+		}
+		const possede = document.getElementById("possede")?.value || "non";
+		const format = document.getElementById("format")?.value || null;
+		const lieu = document.getElementById("lieu")?.value || null;
+		const pret = document.getElementById("pret")?.value || null;
+
+		const recordToInsert = {
+			user_id: currentUser.id,
+			email: currentUser.email,
+			...finalRecord,
+			possede,
+			format,
+			lieu,
+			pret
+		};
+
+		const { error } = await supabase.from("livres").insert(recordToInsert);
+		if (error) {
+			alert("Erreur lors de l'enregistrement : " + error.message);
+			console.error(error);
+		} else {
+			alert("Livre enregistré avec succès !");
+		}
+	};
+	
 	// Gestion du formulaire
 	form.addEventListener("submit", async function (e) {
 		e.preventDefault();
