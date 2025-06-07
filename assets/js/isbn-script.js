@@ -15,6 +15,8 @@ document.addEventListener("DOMContentLoaded", function () {
 		saveBtn.textContent = "Enregistrer dans Supabase";
 		saveBtn.style.marginTop = "1rem";
 		document.body.appendChild(saveBtn);
+	} else {
+		saveBtn = document.getElementById("saveRecord");
 	}
 
 	// Fonction utilitaire pour sécuriser les liens URL
