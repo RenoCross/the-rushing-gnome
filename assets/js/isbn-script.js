@@ -95,13 +95,15 @@ document.addEventListener("DOMContentLoaded", function () {
 	// Fonction de rendu du tableau fusionné	
 	function renderUnifiedTable(allData, req) {
 		const table = document.createElement("table");
+		resultsDiv.innerHTML = ""; // nettoie avant d’ajouter
 		
 		// Entêtes
 		const headerRow = document.createElement("tr");
 		headerRow.innerHTML = `<th>Champ</th>${
 			Object.keys(allData).map(api => 
 				`<th>${api}
-					<br>
+    					<br>${req}
+					<br><br>     
 					<details>
 						<summary style="cursor: pointer;">Voir JSON</summary>
 						<pre style="max-width: 300px; overflow-x: auto; white-space: pre-wrap;">${JSON.stringify(allData[api], null, 2)}</pre>
@@ -258,7 +260,7 @@ document.addEventListener("DOMContentLoaded", function () {
 			row.appendChild(finalCell);
 			table.appendChild(row);
 	
-			row.querySelectorAll("td.api-cell").forEach((cell) => {
+			row.querySelectorAll("td.api-cell").forEach((cell, index) => {
 				cell.style.cursor = "pointer";
 				cell.title = "Cliquer pour copier dans la colonne finale";
 				cell.addEventListener("click", () => {
