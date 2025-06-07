@@ -234,10 +234,7 @@ function renderUnifiedTable(allData, req) {
 				return `<td>-</td>`;
 			}
 		});
-		row.innerHTML = `<th>${label}</th>${cells.join("")}`;
-		table.appendChild(row);
-	}
-
+		
 		finalRecord[label] = getBestValue(fields[label], allData, apiPriority);
 
 		row.innerHTML = `<th>${label}</th>${cells.join("")}`;
