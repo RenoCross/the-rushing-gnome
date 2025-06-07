@@ -3,6 +3,11 @@
 // Attendre que le DOM soit prêt
 document.addEventListener("DOMContentLoaded", function () {
 	const form = document.getElementById("isbn-form");
+	const saveBtn = document.createElement("button");
+	saveBtn.id = "saveRecord";
+	saveBtn.textContent = "Enregistrer dans Supabase";
+	saveBtn.style.marginTop = "1rem";
+	document.body.appendChild(saveBtn);	
 
 	form.addEventListener("submit", async function (e) {
 		e.preventDefault();
@@ -73,8 +78,8 @@ async function fetchBookData() {
 function renderUnifiedTable(allData, req) {
 	const resultsDiv = document.getElementById("results");
 	const table = document.createElement("table");
-	table.border = "1";
-	table.style.marginTop = "1rem";
+	//table.border = "1";
+	//table.style.marginTop = "1rem";
 	
 	// Entêtes
 	const headerRow = document.createElement("tr");
@@ -91,6 +96,25 @@ function renderUnifiedTable(allData, req) {
 	}`;
 	table.appendChild(headerRow);
 
+	const finalRecord = {};
+	const apiPriority = ["GoogleBooks", "OpenLibrary_data", "OpenLibrary_details"];
+
+	function getBestValue(fieldFn, data, priority) {
+		for (const api of priority) {
+			if (data[api] && !data[api].error) {
+				try {
+					return fieldFn.length === 2 ? fieldFn(data[api], api) : fieldFn(data[api]);
+				} catch {}
+			}
+		}
+		return "-";
+	}
+
+	function stripHTML(html) {
+		const div = document.createElement("div");
+		div.innerHTML = html;
+		return div.textContent || div.innerText || "";
+	}
 	const fields = {
 		"Requête": (d, api) => reqs[api] || "-",
 		"ISBN_13": d => {
@@ -181,6 +205,9 @@ function renderUnifiedTable(allData, req) {
 			d.classifications?.dewey_decimal_class 
 			|| d.details?.dewey_decimal_class 
 			|| "-",
+		"Catégories": d =>
+			d.categories
+			|| "-",		
 		"Couverture": d => {
 			const url_cover =
 				d.cover?.medium
@@ -201,10 +228,8 @@ function renderUnifiedTable(allData, req) {
 		const cells = Object.entries(allData).map(([api, data]) => {
 			if (data?.error) return `<td style="color:red;">${data.error}</td>`;
 			try {
-				const value = fields[label].length === 2
-					? fields[label](data, api)
-					: fields[label](data);
-				return `<td>${value}</td>`;
+				const value = fields[label].length === 2 ? fields[label](data, api) : fields[label](data);
+				return `<td class="api-cell">${value}</td>`;
 			} catch {
 				return `<td>-</td>`;
 			}
@@ -213,7 +238,33 @@ function renderUnifiedTable(allData, req) {
 		table.appendChild(row);
 	}
 
+		finalRecord[label] = getBestValue(fields[label], allData, apiPriority);
+
+		row.innerHTML = `<th>${label}</th>${cells.join("")}`;
+
+		const finalCell = document.createElement("td");
+		finalCell.classList.add("final-cell");
+		finalCell.contentEditable = true;
+		finalCell.dataset.field = label;
+		finalCell.innerHTML = finalRecord[label] ?? "-";
+		row.appendChild(finalCell);
+		table.appendChild(row);
+
+		row.querySelectorAll("td.api-cell").forEach((cell) => {
+			cell.style.cursor = "pointer";
+			cell.title = "Cliquer pour copier dans la colonne finale";
+			cell.addEventListener("click", () => {
+				finalCell.innerHTML = cell.innerHTML;
+				finalRecord[label] = stripHTML(cell.innerHTML);
+			});
+		});
+	}
+	
 	resultsDiv.appendChild(table);
+
+	document.getElementById("saveRecord").onclick = async () => {
+		console.log("Final record:", finalRecord);
+		alert("Simuler enregistrement: " + JSON.stringify(finalRecord, null, 2));	
 }
 
 // Fonction utilitaire pour sécuriser les liens URL
