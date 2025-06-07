@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	// Créer le bouton Enregistrer
 	let saveBtn; // ← déclaration accessible dans tout le scope	
 	if (!document.getElementById("saveRecord")) {
-		const saveBtn = document.createElement("button");
+		saveBtn = document.createElement("button");
 		saveBtn.id = "saveRecord";
 		saveBtn.textContent = "Enregistrer dans Supabase";
 		saveBtn.style.marginTop = "1rem";
