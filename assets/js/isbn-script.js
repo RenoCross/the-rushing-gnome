@@ -102,8 +102,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		headerRow.innerHTML = `<th>Champ</th>${
 			Object.keys(allData).map(api => 
 				`<th>${api}
-    					<br>${req}
-					<br><br>     
+    					<br>    
 					<details>
 						<summary style="cursor: pointer;">Voir JSON</summary>
 						<pre style="max-width: 300px; overflow-x: auto; white-space: pre-wrap;">${JSON.stringify(allData[api], null, 2)}</pre>
