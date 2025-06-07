@@ -8,11 +8,13 @@ document.addEventListener("DOMContentLoaded", function () {
 	const loader = document.getElementById("loader");
 
 	// Créer le bouton Enregistrer
-	const saveBtn = document.createElement("button");
-	saveBtn.id = "saveRecord";
-	saveBtn.textContent = "Enregistrer dans Supabase";
-	saveBtn.style.marginTop = "1rem";
-	document.body.appendChild(saveBtn);	
+	if (!document.getElementById("saveRecord")) {
+		const saveBtn = document.createElement("button");
+		saveBtn.id = "saveRecord";
+		saveBtn.textContent = "Enregistrer dans Supabase";
+		saveBtn.style.marginTop = "1rem";
+		document.body.appendChild(saveBtn);
+	}
 
 	// Fonction utilitaire pour sécuriser les liens URL
 	function isSafeUrl(url) {
@@ -163,10 +165,10 @@ document.addEventListener("DOMContentLoaded", function () {
 				|| d.details?.publish_date 
 				|| d.publishedDate 
 				|| "-",
-			"Description": d => 
-				d.description 
-				|| d.details?.description 
-				|| "-",
+			"Description": d => {
+				const desc = d.description || d.details?.description || "-";
+				return typeof desc === "string" ? desc : desc?.value || "-";
+			},			
 			"Pages": d => 
 				d.number_of_pages 
 				|| d.details?.number_of_pages 
@@ -210,16 +212,17 @@ document.addEventListener("DOMContentLoaded", function () {
 				d.classifications?.dewey_decimal_class 
 				|| d.details?.dewey_decimal_class 
 				|| "-",
-			"Catégories": d =>
-				d.categories
-				|| "-",		
+			"Catégories": d => 
+				Array.isArray(d.categories) ? d.categories.join(", ") : 
+				d.categories || "-",
 			"Couverture": d => {
 				const url_cover =
 					d.cover?.medium
 					|| d.cover?.large
 					|| d.cover?.small
 					|| d.thumbnail_url
-					|| d.imageLinks?.Thumbnail			
+					|| d.imageLinks?.Thumbnail
+					|| d.imageLinks?.thumbnail					
 					|| d.imageLinks?.smallThumbnail;
 				if (url_cover) {
 					return `<img src="${url_cover}" alt="cover" style="max-height:150px;">`;
@@ -272,8 +275,10 @@ document.addEventListener("DOMContentLoaded", function () {
 	// Gestion du formulaire
 	form.addEventListener("submit", async function (e) {
 		e.preventDefault();
+		saveBtn.style.display = "none";
 		document.getElementById("loader").style.display = "block";
 		await fetchBookData();
+		saveBtn.style.display = "block";
 		document.getElementById("loader").style.display = "none";
 	});
 });
