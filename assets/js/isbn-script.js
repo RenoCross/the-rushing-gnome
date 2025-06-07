@@ -1,5 +1,28 @@
 // isbn-script.js
 
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
+const supabaseUrl = 'https://[ton-url].supabase.co';
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR2enF2am1hYXZ0dnF6ZWlsbWNnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDc1OTM0OTMsImV4cCI6MjA2MzE2OTQ5M30.rZjwxo4YW6W4ZC2pvm0TGBvTLTkmSpZ8mJCOF3KAdzo';
+const supabase = createClient(supabaseUrl, supabaseKey);
+
+// Connexion
+document.getElementById("login-btn").onclick = async () => {
+  const { user, error } = await supabase.auth.signInWithPassword({
+    email: document.getElementById("email").value,
+    password: document.getElementById("password").value,
+  });
+  document.getElementById("auth-status").textContent = error ? error.message : `Connecté en tant que ${user.email}`;
+};
+
+// Création de compte
+document.getElementById("signup-btn").onclick = async () => {
+  const { user, error } = await supabase.auth.signUp({
+    email: document.getElementById("email").value,
+    password: document.getElementById("password").value,
+  });
+  document.getElementById("auth-status").textContent = error ? error.message : "Compte créé. Veuillez vérifier vos emails.";
+};
+
 // Attendre que le DOM soit prêt
 document.addEventListener("DOMContentLoaded", function () {
 	const form = document.getElementById("isbn-form");
