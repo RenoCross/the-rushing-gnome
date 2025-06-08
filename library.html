@@ -78,6 +78,29 @@ title: ""
         </li>
       </ul>
     </div>
+    <div id="book-form-section" style="display:none;">
+      <h3>Ajouter ce livre à votre bibliothèque</h3>
+      <form id="book-form">
+        <label><input type="checkbox" id="owned"> Je possède ce livre</label><br>
+
+        <div id="ownership-details" style="display:none; margin-left: 1em;">
+          <label>Format :
+	    <select id="format">
+	      <option value="physique">Physique</option>
+	      <option value="numérique">Numérique</option>
+	    </select>
+          </label><br>
+
+          <div id="physical-details" style="display:none; margin-left: 1em;">
+	    <label>Lieu de stockage : <input type="text" id="storage_location"></label><br>
+	    <label><input type="checkbox" id="lendable"> Je suis d'accord pour prêter ce livre</label>
+          </div>
+        </div>
+
+    <button type="submit">Enregistrer dans ma bibliothèque</button>
+    <p id="book-form-status"></p>
+  </form>
+</div>	  
   </section>
     
   <ul class="actions stacked">
