@@ -4,6 +4,8 @@
 const supabaseUrl = 'https://dvzqvjmaavtvqzeilmcg.supabase.co';
 const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR2enF2am1hYXZ0dnF6ZWlsbWNnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDc1OTM0OTMsImV4cCI6MjA2MzE2OTQ5M30.rZjwxo4YW6W4ZC2pvm0TGBvTLTkmSpZ8mJCOF3KAdzo';
 const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+let currentUser = null;
+let finalRecord = {};
 
 // Attendre que le DOM soit prêt
 document.addEventListener("DOMContentLoaded", function () {
@@ -13,11 +15,17 @@ document.addEventListener("DOMContentLoaded", function () {
 	const signupBtn = document.getElementById('signup-btn');
 	const authStatus = document.getElementById('auth-status');
 	const bookFormSection = document.getElementById('book-form-section');
-
+	const logoutBtn = document.getElementById('logout-btn');
+	logoutBtn?.addEventListener('click', async () => {
+		await supabase.auth.signOut();
+		location.reload();
+	});
+	
 	// Vérifie si l'utilisateur est déjà connecté
 	supabase.auth.getSession().then(({ data: { session } }) => {
 		if (session) {
-			currentUser = session.user;			
+			currentUser = session.user;
+			currentUser = data.user;
 			authStatus.textContent = `Connecté en tant que ${session.user.email}`;
 			authSection.style.display = 'none';
 			bookFormSection.style.display = 'block';
@@ -29,6 +37,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	supabase.auth.getSession().then(({ data: { session } }) => {
 		if (session) {
 			currentUser = session.user;
+			currentUser = data.user;
 			authStatus.textContent = `Connecté en tant que ${session.user.email}`;
 			authSection.style.display = 'none';
 			bookFormSection.style.display = 'block';
