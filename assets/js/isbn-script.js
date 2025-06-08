@@ -1,31 +1,52 @@
 // isbn-script.js
 
+// Initialiser Supabase
+const supabaseUrl = 'https://dvzqvjmaavtvqzeilmcg.supabase.co';
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR2enF2am1hYXZ0dnF6ZWlsbWNnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDc1OTM0OTMsImV4cCI6MjA2MzE2OTQ5M30.rZjwxo4YW6W4ZC2pvm0TGBvTLTkmSpZ8mJCOF3KAdzo';
+const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
 // Attendre que le DOM soit prêt
 document.addEventListener("DOMContentLoaded", function () {
-	// Initialiser Supabase
-	const supabaseUrl = 'https://dvzqvjmaavtvqzeilmcg.supabase.co';
-	const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR2enF2am1hYXZ0dnF6ZWlsbWNnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDc1OTM0OTMsImV4cCI6MjA2MzE2OTQ5M30.rZjwxo4YW6W4ZC2pvm0TGBvTLTkmSpZ8mJCOF3KAdzo';
-	const supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
-	// Bouton Connexion
-	const loginBtn = document.createElement("button");
-	loginBtn.id = "loginBtn";
-	loginBtn.textContent = "Connexion";
-	loginBtn.style.marginBottom = "1rem";
-	document.body.insertBefore(loginBtn, document.body.firstChild);
+	const authSection = document.getElementById('auth-section');
+	const loginBtn = document.getElementById('login-btn');
+	const signupBtn = document.getElementById('signup-btn');
+	const authStatus = document.getElementById('auth-status');
+	const bookFormSection = document.getElementById('book-form-section');
 
-	loginBtn.addEventListener("click", async () => {
-		const email = prompt("Email");
-		const password = prompt("Mot de passe");
-		const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-		if (error) {
-			alert("Erreur de connexion : " + error.message);
-			return;
+	// Vérifie si l'utilisateur est déjà connecté
+	supabase.auth.getSession().then(({ data: { session } }) => {
+		if (session) {
+			authStatus.textContent = `Connecté en tant que ${session.user.email}`;
+			authSection.style.display = 'none';
+			bookFormSection.style.display = 'block';
 		}
-		currentUser = data.user;
-		alert(`Bienvenue ${currentUser.email}`);
-		loginBtn.textContent = `Connecté : ${currentUser.email}`;
-		loginBtn.disabled = true;
+	});
+
+	loginBtn?.addEventListener('click', async () => {
+		const email = document.getElementById('email').value;
+		const password = document.getElementById('password').value;
+		const { error, data } = await supabase.auth.signInWithPassword({ email, password });
+		
+		if (error) {
+			authStatus.textContent = "Erreur de connexion : " + error.message;
+		} else {
+			authStatus.textContent = `Connecté en tant que ${data.user.email}`;
+			authSection.style.display = 'none';
+			bookFormSection.style.display = 'block';
+		}
+	});
+	
+	signupBtn?.addEventListener('click', async () => {
+		const email = document.getElementById('email').value;
+		const password = document.getElementById('password').value;
+		const { error, data } = await supabase.auth.signUp({ email, password });
+		
+		if (error) {
+			authStatus.textContent = "Erreur d'inscription : " + error.message;
+		} else {
+			authStatus.textContent = "Inscription réussie ! Veuillez vérifier votre email.";
+		}
 	});
 	
 	// --- Variables DOM principales ---	
