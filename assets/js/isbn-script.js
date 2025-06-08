@@ -25,19 +25,15 @@ document.addEventListener("DOMContentLoaded", function () {
 	supabase.auth.getSession().then(({ data: { session } }) => {
 		if (session) {
 			currentUser = session.user;
-			currentUser = data.user;
 			authStatus.textContent = `Connecté en tant que ${session.user.email}`;
 			authSection.style.display = 'none';
 			bookFormSection.style.display = 'block';
 		}
 	});
 	
-	let currentUser = null;
-	
 	supabase.auth.getSession().then(({ data: { session } }) => {
 		if (session) {
 			currentUser = session.user;
-			currentUser = data.user;
 			authStatus.textContent = `Connecté en tant que ${session.user.email}`;
 			authSection.style.display = 'none';
 			bookFormSection.style.display = 'block';
