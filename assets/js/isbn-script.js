@@ -17,11 +17,24 @@ document.addEventListener("DOMContentLoaded", function () {
 	// Vérifie si l'utilisateur est déjà connecté
 	supabase.auth.getSession().then(({ data: { session } }) => {
 		if (session) {
+			currentUser = session.user;			
 			authStatus.textContent = `Connecté en tant que ${session.user.email}`;
 			authSection.style.display = 'none';
 			bookFormSection.style.display = 'block';
 		}
 	});
+	
+	let currentUser = null;
+	
+	supabase.auth.getSession().then(({ data: { session } }) => {
+		if (session) {
+			currentUser = session.user;
+			authStatus.textContent = `Connecté en tant que ${session.user.email}`;
+			authSection.style.display = 'none';
+			bookFormSection.style.display = 'block';
+		}
+	});
+
 
 	loginBtn?.addEventListener('click', async () => {
 		const email = document.getElementById('email').value;
@@ -31,6 +44,8 @@ document.addEventListener("DOMContentLoaded", function () {
 		if (error) {
 			authStatus.textContent = "Erreur de connexion : " + error.message;
 		} else {
+			currentUser = data.user;
+			currentUser = session.user;			
 			authStatus.textContent = `Connecté en tant que ${data.user.email}`;
 			authSection.style.display = 'none';
 			bookFormSection.style.display = 'block';
@@ -54,6 +69,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	const resultsDiv = document.getElementById("results");
 	const jsonOutput = document.getElementById("jsonOutput");
 	const loader = document.getElementById("loader");
+	let finalRecord = {};
 	
 	// Créer le bouton Enregistrer
 	let saveBtn; // ← déclaration accessible dans tout le scope	
@@ -160,7 +176,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		}`;
 		table.appendChild(headerRow);
 	
-		const finalRecord = {};
+		finalRecord = {};
 		const apiPriority = ["GoogleBooks", "OpenLibrary_data", "OpenLibrary_details"];
 	
 		function getBestValue(fieldFn, data, priority) {
@@ -318,11 +334,6 @@ document.addEventListener("DOMContentLoaded", function () {
 		}
 		
 		resultsDiv.appendChild(table);
-	
-		document.getElementById("saveRecord").onclick = async () => {
-			console.log("Final record:", finalRecord);
-			alert("Simuler enregistrement: " + JSON.stringify(finalRecord, null, 2));	
-		};
 	}
 
 	// Enregistrement Supabase avec user
