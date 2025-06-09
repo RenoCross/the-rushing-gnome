@@ -3,7 +3,12 @@
 // Initialiser Supabase
 const supabaseUrl = 'https://dvzqvjmaavtvqzeilmcg.supabase.co';
 const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR2enF2am1hYXZ0dnF6ZWlsbWNnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDc1OTM0OTMsImV4cCI6MjA2MzE2OTQ5M30.rZjwxo4YW6W4ZC2pvm0TGBvTLTkmSpZ8mJCOF3KAdzo';
-const supabase = createClient(supabaseUrl, supabaseKey);
+
+import { createClient } from '@supabase/supabase-js'
+import { Database } from './database.types'
+
+const supabase = createClient<Database>(supabaseUrl, supabaseKey);
+
 let currentUser = null;
 let finalRecord = {};
 
