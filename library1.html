@@ -1,0 +1,128 @@
+---
+layout: homepage
+title: "" 
+---
+
+<header>
+  <h1>📘 The Rushing Gnome's Library</h1>
+  <p>Drafts • Ideas in progress • Friendly sharing of experiences • Beginnings of projects • Touch of madness</p>
+</header>
+
+<main>
+
+  <section id="contrib">
+    <h2 class="collapsible">Liste des fonctions à développer:</h2>
+    <div class="contrib-content">
+      <ul class="contrib-list">
+        <li>
+          <h3>🔍 Recherche des caractéristiques d'un livre:</h3>
+          <ol>
+			<li>Recueil du numéro ISBN par:
+			  <ul>
+				<li>saisie via un formulaire</li>
+				<li>ou détection dans un ebook préalablement chargé et quelquesoit son extension (*.pdf, *.epub, *.djvu, ...)</li>
+			  </ul>
+			</li>
+		    <li>Interrogation de différentes API (Google / OpenLibrary / ISBNdb) avec affichage d'un compteur pour celles ayant une limite temporelle de nombre d'utilisation</li>
+		    <li>Affichage des données obtenues en en facilitant le copiage</li>
+          </ol>
+        </li>
+        <li>
+          <h3>&#9016; Gestion d'une petite BdD</h3>
+          <p>Pour  partage simplifié au niveau du 1er cercle d'amis :</p>
+          <ul>
+            <li>Authentification utilisateur</li>
+			<li>Pour chaque livre, saisie des caractéristiques du livre, de son lieu de stockage, de leur état, de l'accord de prêt, de la durée du prêt, si prêt en cours, nom emprunteur, appréciation éventuelle</li>
+            <li>gestion de relance email lors du dépassement de durée du prêt</li>
+            <li>saisie à partir du code ISBN</li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+    <h2>Recherche par numéro ISBN</h2>
+  <div id="login-status"></div>
+	  <form id="login-form">
+		  <input id="login-email" type="email" placeholder="Email">
+		  <input id="login-password" type="password" placeholder="Mot de passe">
+		  <button type="submit">Se connecter</button>
+	  </form>
+	  <form id="signup-form">
+		  <input id="signup-email" type="email" placeholder="Email">
+		  <input id="signup-password" type="password" placeholder="Mot de passe">
+		  <button type="submit">S'inscrire</button>
+	  </form>
+	  <button id="logout-button">Se déconnecter</button>
+	  <p id="auth-status"></p>
+    </div> 
+    <div>
+      <ul>
+        <li>
+          <h3>Formulaire de recherche:</h3>
+          <p></p>
+			<form id="isbn-form">
+			  <label for="isbn">ISBN :</label>
+			  <input type="text" id="isbn" placeholder="978-..." required>
+			  <fieldset>
+			    <legend>Choisissez les APIs à interroger :</legend>
+			    <label><input type="checkbox" name="api" value="OpenLibrary_data">Open Library (data)</label><br>
+			    <label><input type="checkbox" name="api" value="OpenLibrary_details">Open Library (details)</label><br>				  
+			    <label><input type="checkbox" name="api" value="GoogleBooks">Google Books</label><br>
+			    <label><input type="checkbox" name="api" value="ISBNdb">ISBNdb</label>
+			  </fieldset>
+			  <button type="submit">Rechercher</button>
+			  <div id="loader" style="display:none; margin-top: 1em;">
+				🔄 Recherche en cours...
+			  </div>
+			</form>
+        </li>
+      </ul>
+      <ul>
+        <li>	  
+			<h3>Résultats</h3>
+			<div id="results"></div>
+			<pre id="jsonOutput"></pre>
+        </li>
+      </ul>
+    </div>
+    <div id="book-form-section" style="display:none;">
+      <h3>Ajouter ce livre à votre bibliothèque</h3>
+      <form id="book-form">
+        <label><input type="checkbox" id="owned"> Je possède ce livre</label><br>
+
+        <div id="ownership-details" style="display:none; margin-left: 1em;">
+          <label>Format :
+	    <select id="format">
+	      <option value="physique">Physique</option>
+	      <option value="numérique">Numérique</option>
+	    </select>
+          </label><br>
+
+          <div id="physical-details" style="display:none; margin-left: 1em;">
+	    <label>Lieu de stockage : <input type="text" id="storage_location"></label><br>
+	    <label><input type="checkbox" id="lendable"> Je suis d'accord pour prêter ce livre</label>
+          </div>
+        </div>
+
+    <button type="submit">Enregistrer dans ma bibliothèque</button>
+    <p id="book-form-status"></p>
+  </form>
+</div>	  
+  </section>
+    
+  <ul class="actions stacked">
+    <li>
+      <a href="index.html" class="button">Homepage</a>	
+      <a href="authenticated.html" class="button">For authenticated</a>
+      <a href="library.html" class="button">📘 MiniProjet Librairie</a>
+      <a href="poems.html" class="button">📜 Kindergarten Poems</a>
+      <a href="about/about-us.html" class="button">About us</a>	 
+    </li>
+  </ul>
+
+  <script src="assets/js/isbn-script.js" defer></script>
+
+</main>
+
+<footer>
+  <p>Author: Reno Cross   -   © 2025   -   GitHub: <a href="https://github.com/RenoCross" target="_blank">@RenoCross</a></p>
+</footer>
