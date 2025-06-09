@@ -85,16 +85,6 @@ document.addEventListener("DOMContentLoaded", function () {
 			bookFormSection.style.display = 'block';
 		}
 	});
-	
-	supabase.auth.getSession().then(({ data: { session } }) => {
-		if (session) {
-			currentUser = session.user;
-			authStatus.textContent = `Connecté en tant que ${session.user.email}`;
-			authSection.style.display = 'none';
-			bookFormSection.style.display = 'block';
-		}
-	});
-
 
 	loginBtn?.addEventListener('click', async () => {
 		const email = document.getElementById('email').value;
