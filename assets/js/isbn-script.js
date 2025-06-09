@@ -1,10 +1,62 @@
 // isbn-script.js
 
+// Import du client Supabase depuis le CDN
+import { createClient } from 'https://cdn.skypack.dev/@supabase/supabase-js@2';
+
 // Initialiser Supabase
 const supabaseUrl = 'https://dvzqvjmaavtvqzeilmcg.supabase.co';
 const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR2enF2am1hYXZ0dnF6ZWlsbWNnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDc1OTM0OTMsImV4cCI6MjA2MzE2OTQ5M30.rZjwxo4YW6W4ZC2pvm0TGBvTLTkmSpZ8mJCOF3KAdzo';
 
-const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+const supabase = createClient(supabaseUrl, supabaseKey);
+
+// Exemple : vérifie l'état de connexion utilisateur
+supabase.auth.getUser().then(({ data, error }) => {
+  if (data?.user) {
+    console.log("✅ Connecté :", data.user.email);
+    document.getElementById('login-status').textContent = `Connecté : ${data.user.email}`;
+  } else {
+    console.log("❌ Non connecté");
+    document.getElementById('login-status').textContent = `Non connecté`;
+  }
+});
+
+// Fonction de connexion
+document.getElementById('login-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const email = document.getElementById('login-email').value;
+  const password = document.getElementById('login-password').value;
+
+  const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+
+  if (error) {
+    alert("Erreur de connexion : " + error.message);
+  } else {
+    alert("Connexion réussie !");
+    location.reload();
+  }
+});
+
+// Fonction de déconnexion
+document.getElementById('logout-button').addEventListener('click', async () => {
+  await supabase.auth.signOut();
+  alert("Déconnexion réussie");
+  location.reload();
+});
+
+// Fonction d'inscription
+document.getElementById('signup-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const email = document.getElementById('signup-email').value;
+  const password = document.getElementById('signup-password').value;
+
+  const { data, error } = await supabase.auth.signUp({ email, password });
+
+  if (error) {
+    alert("Erreur d'inscription : " + error.message);
+  } else {
+    alert("Inscription réussie ! Vérifie ton email.");
+  }
+});
 
 let currentUser = null;
 let finalRecord = {};
