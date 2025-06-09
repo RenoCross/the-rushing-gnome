@@ -1,7 +1,7 @@
 // isbn-script.js
 
 // Import du client Supabase depuis le CDN
-import { createClient } from 'https://cdn.skypack.dev/@supabase/supabase-js@2';
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
 
 // Initialiser Supabase
 const supabaseUrl = 'https://dvzqvjmaavtvqzeilmcg.supabase.co';
