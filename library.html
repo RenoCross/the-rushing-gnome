@@ -40,13 +40,19 @@ title: ""
       </ul>
     </div>
     <h2>Recherche par numéro ISBN</h2>
-    <div id="auth-section">
-	<h3>Connexion</h3>
-	<input type="email" id="email" placeholder="Votre email">
-	<input type="password" id="password" placeholder="Mot de passe">
-	<button id="login-btn">Connexion</button>
-	<button id="logout-btn">Déconnexion</button>
-	<p id="auth-status"></p>
+  <div id="login-status"></div>
+	  <form id="login-form">
+		  <input id="login-email" type="email" placeholder="Email">
+		  <input id="login-password" type="password" placeholder="Mot de passe">
+		  <button type="submit">Se connecter</button>
+	  </form>
+	  <form id="signup-form">
+		  <input id="signup-email" type="email" placeholder="Email">
+		  <input id="signup-password" type="password" placeholder="Mot de passe">
+		  <button type="submit">S'inscrire</button>
+	  </form>
+	  <button id="logout-button">Se déconnecter</button>
+	  <p id="auth-status"></p>
     </div> 
     <div>
       <ul>
