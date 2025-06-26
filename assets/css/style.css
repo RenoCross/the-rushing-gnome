@@ -84,6 +84,7 @@ a {
 
 #poem pre {
   white-space: pre-wrap;
+  height:300px;
   font-size: .9rem;
   color: #4b3e2e;
   line-height: 1.4;
