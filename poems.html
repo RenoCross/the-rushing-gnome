@@ -9,10 +9,57 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1">
 	<style>
-	    .orange {
-	      color: green;
-	      font-weight: bold;
-	    }
+		.orange {
+		color: green;
+		font-weight: bold;
+		}
+
+		@font-face {
+		  font-family: 'CursiveCustom';
+		  src: url('../fonts/Cursivestandard.woff2') format('woff2'),
+		       url('../fonts/Cursivestandard.woff') format('woff');
+		  font-weight: normal;
+		  font-style: normal;
+		}
+		
+		.poem-block,
+		.poem-block .poem-title,
+		.poem-block .poem-author,
+		.poem-block .poem-text {
+		  font-family: 'CursiveCustom', cursive !important;
+		}
+		
+		.poem-block {
+		  max-width: 700px;
+		  margin: 2em auto;
+		  text-align: center;
+		  line-height: 1.8;
+		  background: #fdfdfd;
+		  padding: 1.5em;
+		  border-left: 4px solid #ccc;
+		  border-radius: 8px;
+		}
+		
+		.poem-text {
+		  margin-bottom: 1em;
+		  font-size: 1.07em !important;
+		  text-align: left;	
+		}
+		
+		.poem-title {
+		  text-align: center;
+		  font-weight: bold;
+		  font-size: 1.17em !important;
+		  margin-bottom: 1em;
+		}
+		
+		.poem-author {
+		  padding-left: 8em;
+		  text-align: center;
+		  font-weight: bold;
+		  font-size: 1.07em !important;
+		  margin-top: 1em;
+		}		
 	</style>
 </head>
 <body>
